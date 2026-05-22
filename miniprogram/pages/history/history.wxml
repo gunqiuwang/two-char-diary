@@ -1,0 +1,22 @@
+<!-- pages/history/history.wxml -->
+<view class="history-page">
+  <view class="history-list">
+    <view class="history-item" wx:for="{{historyList}}" wx:key="date" bindtap="viewDetail" data-date="{{item.date}}">
+      <view class="item-date">{{item.dateText}}</view>
+      <view class="item-words">{{item.words}}</view>
+      <view class="item-hexagram" wx:if="{{item.hexagramName}}">
+        <view class="item-yao-group">
+          <block wx:for="{{item.displayYaos}}" wx:for-item="yao" wx:key="index">
+            <view class="mini-yao {{yao.type}}"></view>
+          </block>
+        </view>
+        <view class="item-name">{{item.hexagramName}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{historyList.length === 0}}">
+    <view class="empty-text">暂无记录</view>
+    <view class="empty-hint">每天用两个字记下一天</view>
+  </view>
+</view>

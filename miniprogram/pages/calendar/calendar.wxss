@@ -1,0 +1,505 @@
+/* pages/calendar/calendar.wxss */
+
+.page {
+  min-height: 100vh;
+  background: #f5f4ed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.paper-texture {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.status-bar { width: 100%; flex-shrink: 0; }
+
+/* ===== 动画 ===== */
+.anim-fade-in { animation: fadeIn 600ms ease-out both; }
+.anim-fade-in-d1 { animation: fadeIn 600ms ease-out 150ms both; }
+.anim-fade-in-d2 { animation: fadeIn 600ms ease-out 300ms both; }
+.anim-slide-up { animation: slideUp 500ms ease-out both; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20rpx); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== 导航栏 ===== */
+.nav-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0 20rpx;
+  box-sizing: border-box;
+}
+
+.back-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.back-btn:active { transform: scale(0.85); }
+
+.back-arrow {
+  width: 20rpx;
+  height: 20rpx;
+  border-left: 3rpx solid #5A5850;
+  border-bottom: 3rpx solid #5A5850;
+  transform: rotate(45deg);
+  margin-left: 6rpx;
+}
+
+.nav-title-text {
+  font-size: 28rpx;
+  color: #2F312B;
+  letter-spacing: 6rpx;
+  font-weight: 500;
+}
+
+.nav-placeholder { width: 56rpx; }
+
+/* ===== 年份 ===== */
+.year-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48rpx;
+  padding: 12rpx 0 24rpx;
+}
+
+.year-nav {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.year-nav:active { transform: scale(0.8); }
+
+.nav-arrow {
+  font-size: 40rpx;
+  color: #5A5850;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.year-num {
+  font-size: 40rpx;
+  color: #2F312B;
+  letter-spacing: 4rpx;
+  font-weight: 300;
+  min-width: 100rpx;
+  text-align: center;
+}
+
+/* ===== 月份横向滚动 ===== */
+.month-scroll {
+  width: 100%;
+  white-space: nowrap;
+  padding: 0 0 20rpx;
+}
+
+.month-list {
+  display: inline-flex;
+  gap: 16rpx;
+  padding: 0 8rpx;
+}
+
+.month-tag {
+  padding: 10rpx 24rpx;
+  border: 2rpx solid #D8D4CB;
+  border-radius: 24rpx;
+  font-size: 22rpx;
+  color: #6B6860;
+  letter-spacing: 2rpx;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.month-tag.active {
+  background: #3A3A35;
+  border-color: #3A3A35;
+  color: #f5f4ed;
+}
+
+.month-tag:active {
+  transform: scale(0.92);
+}
+
+/* ===== 星期标题 ===== */
+.weekday-row {
+  display: flex;
+  width: 100%;
+  padding: 8rpx 0;
+}
+
+.weekday-cell {
+  width: 14.28%;
+  text-align: center;
+  font-size: 18rpx;
+  color: #B0A99A;
+  letter-spacing: 1rpx;
+}
+
+/* ===== 日期网格 ===== */
+.days-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-bottom: 16rpx;
+}
+
+.day-cell {
+  width: 14.28%;
+  height: 72rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.25s ease, transform 0.25s ease;
+  border-radius: 8rpx;
+}
+
+.day-num {
+  font-size: 24rpx;
+  color: #B0A99A;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.day-cell.has-record .day-num {
+  color: #3A3A35;
+  font-weight: 500;
+}
+
+.day-cell.is-today .day-num {
+  color: #2F312B;
+  font-weight: 600;
+}
+
+.day-cell.is-today::after {
+  content: '';
+  position: absolute;
+  bottom: 6rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6rpx;
+  height: 6rpx;
+  border-radius: 50%;
+  background: #B8A88A;
+}
+
+.day-cell.is-selected {
+  background: rgba(58, 58, 53, 0.06);
+}
+
+.day-cell.is-selected .day-num {
+  color: #2F312B;
+  font-weight: 600;
+}
+
+.day-dot {
+  width: 4rpx;
+  height: 4rpx;
+  border-radius: 50%;
+  background: #C4B08C;
+  margin-top: 3rpx;
+}
+
+.day-cell.is-empty {
+  visibility: hidden;
+}
+
+.day-cell.has-record:active {
+  background: rgba(138, 126, 107, 0.1);
+}
+
+/* ===== 分隔线 ===== */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  width: 60%;
+  padding: 16rpx 0 24rpx;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1rpx;
+  background: #E0DDD4;
+}
+
+.divider-dot {
+  width: 6rpx;
+  height: 6rpx;
+  border-radius: 50%;
+  background: #C8C3B8;
+}
+
+/* ===== 详情卡片 ===== */
+.detail-card {
+  width: 100%;
+  background: #faf9f5;
+  border: 2rpx solid #D8D4CB;
+  border-radius: 12rpx;
+  padding: 36rpx 32rpx;
+}
+
+.detail-date {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.detail-date-text {
+  font-size: 20rpx;
+  color: #8A8580;
+  letter-spacing: 2rpx;
+}
+
+.detail-lunar {
+  font-size: 20rpx;
+  color: #B0A99A;
+  letter-spacing: 2rpx;
+}
+
+.detail-words {
+  font-size: 80rpx;
+  font-weight: 600;
+  color: #1F1F1F;
+  letter-spacing: 8rpx;
+  text-align: center;
+  margin-bottom: 24rpx;
+  line-height: 1.1;
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+}
+
+.detail-hex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  margin-bottom: 20rpx;
+}
+
+.detail-hex-symbol {
+  font-size: 64rpx;
+  color: #2F312B;
+  line-height: 1.15;
+}
+
+.detail-hex-name {
+  font-size: 24rpx;
+  color: #3A3A35;
+  letter-spacing: 3rpx;
+}
+
+.detail-hex-ci {
+  font-size: 22rpx;
+  color: #6B6860;
+  letter-spacing: 1rpx;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.detail-yaos {
+  width: 100%;
+  border-top: 1rpx solid #E8E5DC;
+  padding-top: 16rpx;
+}
+
+.detail-yao {
+  padding: 6rpx 0;
+  border-bottom: 1rpx solid #EEEDEA;
+}
+
+.detail-yao:last-child {
+  border-bottom: none;
+}
+
+.detail-yao-text {
+  font-size: 20rpx;
+  color: #5A5850;
+  letter-spacing: 1rpx;
+  line-height: 1.7;
+}
+
+/* ===== 无记录 ===== */
+.detail-empty {
+  padding: 60rpx 0;
+}
+
+.detail-empty-text {
+  font-size: 24rpx;
+  color: #B0A99A;
+  letter-spacing: 3rpx;
+}
+
+/* ===== 暗色模式 ===== */
+.dark-page .back-arrow {
+  border-color: #8a8a80;
+}
+
+.dark-page .nav-title-text {
+  color: #d0d0c8;
+}
+
+.dark-page .year-num {
+  color: #d0d0c8;
+}
+
+.dark-page .nav-arrow {
+  color: #8a8a80;
+}
+
+.dark-page .month-tag {
+  border-color: #555550;
+  color: #8a8a80;
+}
+
+.dark-page .month-tag.active {
+  background: #7a7a70;
+  border-color: #7a7a70;
+  color: #2a2a28;
+}
+
+.dark-page .weekday-cell {
+  color: #5a5a50;
+}
+
+.dark-page .day-num {
+  color: #7a7a70;
+}
+
+.dark-page .day-cell.has-record .day-num {
+  color: #b0b0a8;
+}
+
+.dark-page .day-cell.is-today .day-num {
+  color: #d0d0c8;
+}
+
+.dark-page .day-cell.is-today::after {
+  background: #8a7a60;
+}
+
+.dark-page .day-cell.is-selected {
+  background: rgba(138, 126, 107, 0.15);
+}
+
+.dark-page .day-cell.is-selected .day-num {
+  color: #d0d0c8;
+}
+
+.dark-page .day-dot {
+  background: #8a7a60;
+}
+
+.dark-page .divider-line {
+  background: #444440;
+}
+
+.dark-page .divider-dot {
+  background: #555550;
+}
+
+.dark-page .detail-card {
+  background: #333330;
+  border-color: #444440;
+}
+
+.dark-page .detail-date-text {
+  color: #b0b0a8;
+}
+
+.dark-page .detail-lunar {
+  color: #7a7a70;
+}
+
+.dark-page .detail-words {
+  color: #d0d0c8;
+}
+
+.dark-page .detail-hex-symbol {
+  color: #d0d0c8;
+}
+
+.dark-page .detail-hex-name {
+  color: #b0b0a8;
+}
+
+.dark-page .detail-hex-ci {
+  color: #8a8a80;
+}
+
+.dark-page .detail-yaos {
+  border-top-color: #444440;
+}
+
+.dark-page .detail-yao {
+  border-bottom-color: #3a3a38;
+}
+
+.dark-page .detail-yao-text {
+  color: #9a9a90;
+}
+
+.dark-page .detail-empty-text {
+  color: #5a5a50;
+}
+
+/* 详情卡片暗色 */
+.card-dark .detail-date-text {
+  color: #b0b0a8;
+}
+
+.card-dark .detail-lunar {
+  color: #7a7a70;
+}
+
+.card-dark .detail-words {
+  color: #d0d0c8;
+}
+
+.card-dark .detail-hex-symbol {
+  color: #d0d0c8;
+}
+
+.card-dark .detail-hex-name {
+  color: #b0b0a8;
+}
+
+.card-dark .detail-hex-ci {
+  color: #8a8a80;
+}
+
+.card-dark .detail-yaos {
+  border-top-color: #444440;
+}
+
+.card-dark .detail-yao {
+  border-bottom-color: #3a3a38;
+}
+
+.card-dark .detail-yao-text {
+  color: #9a9a90;
+}

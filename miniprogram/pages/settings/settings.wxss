@@ -1,0 +1,205 @@
+/* pages/settings/settings.wxss */
+
+/* ===== 动画 ===== */
+.anim-fade-in { animation: fadeIn 600ms ease-out both; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.settings-page {
+  min-height: 100vh;
+  background-color: #f5f4ed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+  position: relative;
+  overflow-x: hidden;
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
+}
+
+.setting-section {
+  width: 100%;
+  margin-bottom: 48rpx;
+  position: relative;
+  z-index: 1;
+  padding-top: 8rpx;
+}
+
+.top-bar + .setting-section {
+  margin-top: 40rpx;
+}
+
+.status-bar {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* 返回按钮 */
+.top-bar {
+  width: 100%;
+  padding: 16rpx 24rpx 8rpx;
+  box-sizing: border-box;
+}
+
+.back-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.back-btn:active {
+  transform: scale(0.85);
+}
+
+.back-arrow {
+  width: 20rpx;
+  height: 20rpx;
+  border-left: 3rpx solid #5A5850;
+  border-bottom: 3rpx solid #5A5850;
+  transform: rotate(45deg);
+  margin-left: 6rpx;
+}
+
+.settings-page.dark-mode .back-arrow {
+  border-color: #8a8a80;
+}
+
+.settings-page.dark-mode .setting-title {
+  color: #7a7a70;
+}
+
+.settings-page.dark-mode .setting-item {
+  background: #333330;
+  border-color: #444440;
+}
+
+.settings-page.dark-mode .setting-label {
+  color: #d0d0c8;
+}
+
+.settings-page.dark-mode .setting-value {
+  color: #9a9a90;
+}
+
+.settings-page.dark-mode .setting-arrow {
+  color: #6a6a60;
+}
+
+.settings-page.dark-mode .bg-preview {
+  border-color: #444440;
+}
+
+.settings-page.dark-mode .bg-card.active .bg-preview {
+  border-color: #8A7E6B;
+}
+
+.settings-page.dark-mode .bg-name {
+  color: #7a7a70;
+}
+
+.settings-page.dark-mode .bg-card.active .bg-name {
+  color: #c0c0b8;
+}
+
+
+.setting-section {
+  width: 100%;
+  margin-bottom: 48rpx;
+  position: relative;
+  z-index: 1;
+  padding-top: 8rpx;
+}
+
+.setting-title {
+  font-size: 22rpx;
+  color: #B8B6AE;
+  letter-spacing: 4rpx;
+  margin-bottom: 16rpx;
+  padding-left: 4rpx;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 20rpx;
+  background: #faf9f5;
+  border: 1rpx solid #E8E5DC;
+  border-radius: 4rpx;
+  margin-bottom: 2rpx;
+}
+
+.setting-item:first-of-type {
+  border-radius: 4rpx 4rpx 0 0;
+}
+
+.setting-item:last-of-type {
+  border-radius: 0 0 4rpx 4rpx;
+  margin-bottom: 0;
+}
+
+.setting-item:only-of-type {
+  border-radius: 4rpx;
+}
+
+.setting-label {
+  font-size: 28rpx;
+  color: #4A4A45;
+}
+
+.setting-value {
+  font-size: 28rpx;
+  color: #8A8A82;
+}
+
+.setting-arrow {
+  font-size: 32rpx;
+  color: #B8B6AE;
+}
+
+/* 背景风格选择 */
+.bg-grid {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bg-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  transition: transform 0.3s ease;
+  flex: 1;
+}
+
+.bg-card:active {
+  transform: scale(0.92);
+}
+
+.bg-preview {
+  width: 120rpx;
+  height: 160rpx;
+  border-radius: 6rpx;
+  border: 2rpx solid #E8E5DC;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bg-card.active .bg-preview {
+  border-color: #8A7E6B;
+  box-shadow: 0 0 0 3rpx rgba(138, 126, 107, 0.15);
+}
+
+.bg-name {
+  font-size: 20rpx;
+  color: #8A8580;
+  letter-spacing: 2rpx;
+}
+
+.bg-card.active .bg-name {
+  color: #4A4A45;
+}

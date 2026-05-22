@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/share/share",
+    "pages/calendar/calendar",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f5f4ed",
+    "navigationBarTitleText": "二字日记",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f4ed"
+  },
+  "sitemapLocation": "sitemap.json"
+}

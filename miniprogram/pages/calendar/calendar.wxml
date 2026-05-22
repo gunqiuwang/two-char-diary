@@ -1,0 +1,90 @@
+<!-- pages/calendar/calendar.wxml -->
+<view class="page {{isDark ? 'dark-page' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+  <view class="paper-texture {{bgClass}}"></view>
+
+  <!-- 状态栏 -->
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- 导航栏 -->
+  <view class="nav-bar anim-fade-in">
+    <view class="back-btn" bindtap="goBack">
+      <view class="back-arrow"></view>
+    </view>
+    <text class="nav-title-text">年历</text>
+    <view class="nav-placeholder"></view>
+  </view>
+
+  <!-- 年份选择 -->
+  <view class="year-header anim-fade-in-d1">
+    <view class="year-nav" bindtap="prevYear">
+      <text class="nav-arrow">‹</text>
+    </view>
+    <text class="year-num">{{year}}</text>
+    <view class="year-nav" bindtap="nextYear">
+      <text class="nav-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 月份横向滚动 -->
+  <scroll-view class="month-scroll anim-fade-in-d1" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="month-list">
+      <view class="month-tag {{month === item ? 'active' : ''}}"
+        wx:for="{{[1,2,3,4,5,6,7,8,9,10,11,12]}}" wx:key="*this"
+        data-month="{{item}}" bindtap="selectMonth"
+        style="{{month === item ? monthActiveStyle : ''}}">
+        <text>{{item}}月</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 星期标题 -->
+  <view class="weekday-row anim-fade-in-d2">
+    <view class="weekday-cell" wx:for="{{weekdays}}" wx:key="*this">
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 日期网格 -->
+  <view class="days-grid anim-fade-in-d2">
+    <view class="day-cell {{item.isEmpty ? 'is-empty' : ''}} {{item.hasRecord ? 'has-record' : ''}} {{item.isToday ? 'is-today' : ''}} {{item.isSelected ? 'is-selected' : ''}}"
+      wx:for="{{days}}" wx:key="index"
+      data-date="{{item.date}}" data-isempty="{{item.isEmpty}}"
+      bindtap="onDayTap">
+      <text class="day-num" wx:if="{{!item.isEmpty}}">{{item.day}}</text>
+      <view class="day-dot" wx:if="{{item.hasRecord}}"></view>
+    </view>
+  </view>
+
+  <!-- 分隔线 -->
+  <view class="divider anim-fade-in-d2">
+    <view class="divider-line"></view>
+    <view class="divider-dot"></view>
+    <view class="divider-line"></view>
+  </view>
+
+  <!-- 选中日期的详情 -->
+  <view class="detail-card {{isDark ? 'card-dark' : ''}} anim-slide-up" wx:if="{{selectedData}}" style="background: {{isDark ? '#333330' : bgStyle === 'silk' ? '#faf6ee' : bgStyle === 'bamboo' ? '#e8efe2' : '#faf9f5'}}; border-color: {{isDark ? '#444440' : bgStyle === 'silk' ? '#e0d6c4' : bgStyle === 'bamboo' ? '#c8d4c0' : '#D8D4CB'}};">
+    <view class="detail-date">
+      <text class="detail-date-text">{{selectedDate}}</text>
+      <text class="detail-lunar">{{selectedLunar}}</text>
+    </view>
+    <view class="detail-words">{{selectedData.words}}</view>
+    <view class="detail-hex" wx:if="{{selectedData.hexagramSymbol}}">
+      <text class="detail-hex-symbol">{{selectedData.hexagramSymbol}}</text>
+      <text class="detail-hex-name">{{selectedData.hexagramName}}</text>
+      <text class="detail-hex-ci">{{selectedData.hexagramText}}</text>
+    </view>
+    <view class="detail-yaos" wx:if="{{selectedData.yaoTexts.length}}">
+      <view class="detail-yao" wx:for="{{selectedData.yaoTexts}}" wx:key="index">
+        <text class="detail-yao-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无记录提示 -->
+  <view class="detail-empty anim-fade-in-d2" wx:if="{{selectedDate && !selectedData}}">
+    <text class="detail-empty-text">当日暂无记录</text>
+  </view>
+
+  <view style="height: 80rpx;"></view>
+</view>

@@ -1,0 +1,99 @@
+<!-- pages/index/index.wxml -->
+<!-- 二字爻记 -->
+<view class="page {{isDark ? 'dark-page' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+  <view class="paper-texture {{bgClass}}"></view>
+
+  <!-- 状态栏占位 -->
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- 顶部标题区 -->
+  <view class="top-section">
+    <view class="nav-title anim-fade-in">
+      <text class="title-text">二字爻记</text>
+      <view class="seal">爻</view>
+    </view>
+    <view class="date-section anim-fade-in-d1">
+      <view class="date-row">
+        <text class="date-year">{{lunarYear}}</text>
+        <view class="date-dot"></view>
+        <text class="date-day">{{lunarMonthDay}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主体内容 -->
+  <view class="main-content">
+    <!-- 米字框：视觉主体 -->
+    <view class="words-section">
+      <view class="mi-zi-area">
+        <view class="mi-zi-box anim-scale-in {{activeIndex === 0 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="0" bindtap="onBoxTap" style="animation-delay: 200ms;">
+          <view class="grid-h"></view>
+          <view class="grid-v"></view>
+          <view class="grid-d1"></view>
+          <view class="grid-d2"></view>
+          <text class="mi-char {{chars[0] ? 'char-pop' : ''}}">{{chars[0] || ''}}</text>
+          <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input1}}" bindinput="onInput1" bindblur="onBlur1" bindfocus="onFocus1" />
+        </view>
+        <view class="mi-zi-box anim-scale-in {{activeIndex === 1 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="1" bindtap="onBoxTap" style="animation-delay: 320ms;">
+          <view class="grid-h"></view>
+          <view class="grid-v"></view>
+          <view class="grid-d1"></view>
+          <view class="grid-d2"></view>
+          <text class="mi-char {{chars[1] ? 'char-pop' : ''}}">{{chars[1] || ''}}</text>
+          <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input2}}" bindinput="onInput2" bindblur="onBlur2" bindfocus="onFocus2" />
+        </view>
+      </view>
+
+      <!-- 备选词 -->
+      <view class="candidates" wx:if="{{showCandidates && !isRecorded}}">
+        <view class="candidates-header">
+          <text class="candidates-title">备选词</text>
+          <view class="candidates-refresh" bindtap="refreshCandidates">换一批</view>
+        </view>
+        <view class="candidates-grid">
+          <view class="candidate-item anim-pop-in" wx:for="{{candidateWords}}" wx:key="*this" bindtap="selectWord" data-word="{{item}}" style="animation-delay: {{index * 80}}ms;">
+            <text>{{item}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 铜钱 / 卦象 共用容器 -->
+    <view class="oracle-area">
+      <!-- 铜钱 -->
+      <view class="coin-wrap" wx:if="{{castingState !== 'result'}}">
+        <view class="coin-icon" bindtap="startCasting">
+          <view class="coin-outer"></view>
+          <view class="coin-inner"></view>
+        </view>
+      </view>
+
+      <!-- 卦象 -->
+      <view class="hexagram-section" wx:if="{{castingState === 'result'}}">
+        <view class="hex-symbol anim-scale-in">{{hexagramSymbol}}</view>
+        <view class="hex-name anim-fade-in-d1">{{hexagramName}}</view>
+        <view class="hex-meta anim-fade-in-d2">
+          <text class="hex-ci">{{hexagramText}}</text>
+        </view>
+        <view class="hex-yaos">
+          <view class="hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{300 + index * 100}}ms;">
+            <text class="yao-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分享印记 -->
+    <view class="share-mark anim-fade-in-d3" wx:if="{{castingState === 'result' && isRecorded}}" bindtap="goToShare">↗</view>
+  </view>
+
+  <!-- 漂浮导航印记 -->
+  <view class="float-nav-left anim-fade-in-d3" bindtap="goToCalendar">
+    <view class="nav-icon icon-calendar">
+      <view class="book-spine"></view>
+    </view>
+  </view>
+  <view class="float-nav-right anim-fade-in-d3" bindtap="openSettings">
+    <view class="nav-icon icon-settings"></view>
+  </view>
+</view>

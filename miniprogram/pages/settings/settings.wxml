@@ -1,0 +1,62 @@
+<!-- pages/settings/settings.wxml -->
+<view class="settings-page {{bgStyle === 'dark' ? 'dark-mode' : ''}}" style="background-color: {{bgStyle === 'dark' ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+  <view class="paper-texture {{bgClass}}"></view>
+
+  <!-- 状态栏 -->
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- 返回按钮 -->
+  <view class="top-bar anim-fade-in">
+    <view class="back-btn" bindtap="goBack">
+      <view class="back-arrow"></view>
+    </view>
+  </view>
+
+  <!-- 背景风格 -->
+  <view class="setting-section">
+    <view class="setting-title">背景</view>
+    <view class="bg-grid">
+      <view class="bg-card {{bgStyle === item.key ? 'active' : ''}}" wx:for="{{bgStyles}}" wx:key="key" bindtap="onBgStyleChange" data-key="{{item.key}}">
+        <view class="bg-preview" style="background: {{item.bg}};"></view>
+        <text class="bg-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 每日提醒 -->
+  <view class="setting-section">
+    <view class="setting-title">每日提醒</view>
+    <view class="setting-item">
+      <view class="setting-label">提醒时间</view>
+      <picker mode="time" value="{{reminderTime}}" bindchange="onTimeChange">
+        <view class="setting-value">{{reminderTime}}</view>
+      </picker>
+    </view>
+    <view class="setting-item">
+      <view class="setting-label">开启提醒</view>
+      <switch checked="{{reminderEnabled}}" bindchange="onReminderToggle" color="#B8A88A" />
+    </view>
+  </view>
+
+  <!-- 数据管理 -->
+  <view class="setting-section">
+    <view class="setting-title">数据</view>
+    <view class="setting-item" bindtap="exportData">
+      <view class="setting-label">导出记录</view>
+      <view class="setting-arrow">›</view>
+    </view>
+    <view class="setting-item" bindtap="clearData">
+      <view class="setting-label">清除所有数据</view>
+      <view class="setting-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="setting-section">
+    <view class="setting-title">关于</view>
+    <view class="setting-item">
+      <view class="setting-label">版本</view>
+      <view class="setting-value">1.0.0</view>
+    </view>
+  </view>
+</view>

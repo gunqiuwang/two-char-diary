@@ -1,0 +1,85 @@
+<!-- pages/share/share.wxml -->
+<view class="share-page {{isDark ? 'dark-page' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+  <view class="paper-texture {{bgClass}}"></view>
+
+  <!-- 状态栏 -->
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- 返回按钮 -->
+  <view class="top-bar anim-fade-in">
+    <view class="back-btn" bindtap="goBack">
+      <view class="back-arrow"></view>
+    </view>
+  </view>
+
+  <!-- 卡片 -->
+  <view class="share-card {{isDark ? 'card-dark' : ''}}" id="shareCard" wx:if="{{words}}" style="background: {{isDark ? '#333330' : bgStyle === 'silk' ? '#faf6ee' : bgStyle === 'bamboo' ? '#e8efe2' : '#faf9f5'}}; border-color: {{isDark ? '#444440' : bgStyle === 'silk' ? '#e0d6c4' : bgStyle === 'bamboo' ? '#c8d4c0' : '#D8D4CB'}};">
+    <!-- 标题 + 印章 -->
+    <view class="card-title anim-fade-in">
+      <text class="title-text">二字爻记</text>
+      <view class="seal">爻</view>
+    </view>
+
+    <!-- 农历日期 -->
+    <view class="card-date anim-fade-in-d1">
+      <view class="card-date-row">
+        <view class="card-date-line"></view>
+        <text class="card-date-text">{{lunarYear}}</text>
+        <view class="card-date-dot"></view>
+        <text class="card-date-text">{{lunarMonthDay}}</text>
+        <view class="card-date-line"></view>
+      </view>
+    </view>
+
+    <!-- 米字格 -->
+    <view class="mi-zi-area anim-scale-in" style="animation-delay: 200ms;">
+      <view class="mi-zi-box">
+        <view class="grid-h"></view>
+        <view class="grid-v"></view>
+        <view class="grid-d1"></view>
+        <view class="grid-d2"></view>
+        <text class="mi-char">{{words[0] || ''}}</text>
+      </view>
+      <view class="mi-zi-box">
+        <view class="grid-h"></view>
+        <view class="grid-v"></view>
+        <view class="grid-d1"></view>
+        <view class="grid-d2"></view>
+        <text class="mi-char">{{words[1] || ''}}</text>
+      </view>
+    </view>
+
+    <!-- 卦象 -->
+    <view class="card-hex-section" wx:if="{{hexagramSymbol}}">
+      <view class="card-hex-symbol anim-scale-in" style="animation-delay: 300ms;">{{hexagramSymbol}}</view>
+      <view class="card-hex-name anim-fade-in-d2">{{hexagramName}}</view>
+      <view class="card-hex-ci anim-fade-in-d2">{{hexagramText}}</view>
+      <view class="card-hex-yaos" wx:if="{{displayYaos.length}}">
+        <view class="card-hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{400 + index * 100}}ms;">
+          <text class="card-yao-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无数据 -->
+  <view class="card-empty anim-fade-in-d1" wx:if="{{!words}}">
+    <text class="card-empty-text">暂无记录</text>
+  </view>
+
+  <!-- 风格选择 -->
+  <view class="style-grid anim-fade-in-d2">
+    <view class="style-card {{bgStyle === item.key ? 'active' : ''}}" wx:for="{{bgStyles}}" wx:key="key" bindtap="onBgStyleChange" data-key="{{item.key}}">
+      <view class="style-preview" style="background: {{item.bg}};"></view>
+      <text class="style-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 操作印记 -->
+  <view class="action-row anim-fade-in-d3">
+    <text class="action-mark" bindtap="saveImage">↓</text>
+    <text class="action-mark" bindtap="shareToFriend">↗</text>
+  </view>
+
+  <canvas type="2d" id="shareCanvas" class="hidden-canvas"></canvas>
+</view>
