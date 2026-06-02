@@ -5,6 +5,7 @@ confidence: high
 last_updated: 2026-06-02
 owner: both
 reviewed_by: human
+aliases: ["二字日记", "二字日记 Home", "two-char-diary"]
 ---
 
 # 🏠 二字日记 — Agent Vault
