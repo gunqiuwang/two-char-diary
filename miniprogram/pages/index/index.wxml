@@ -98,8 +98,10 @@
     <view class="nav-icon icon-calendar">
       <view class="book-spine"></view>
     </view>
+    <text class="nav-label">记录</text>
   </view>
   <view class="float-nav-right anim-fade-in-d3" bindtap="openSettings">
     <view class="nav-icon icon-settings"></view>
+    <text class="nav-label">设置</text>
   </view>
 </view>

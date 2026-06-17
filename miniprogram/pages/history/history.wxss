@@ -34,7 +34,7 @@
   color: #2F312B;
   flex: 1;
   letter-spacing: 6rpx;
-  font-family: "STSong", "Songti SC", "PingFang SC", serif;
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "STSong", "Songti SC", "PingFang SC", serif;
 }
 
 .item-hexagram {
