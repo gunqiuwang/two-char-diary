@@ -162,7 +162,7 @@ Page({
         
         // 标题 "二字爻记" + 印章
         ctx.fillStyle = isDark ? '#d0d0c8' : '#2F312B'
-        ctx.font = '500 32px "LXGW WenKai GB", serif'
+        ctx.font = '500 32px "LXGW WenKai GB", "WeChatSansSS", serif'
         ctx.textAlign = 'center'
         ctx.fillText('二字爻记', cx - 14, y + 20)
         
@@ -176,7 +176,7 @@ Page({
         ctx.lineWidth = 1.5
         ctx.strokeRect(-18, -18, 36, 36)
         ctx.fillStyle = isDark ? 'rgba(200,80,60,0.45)' : 'rgba(180,40,30,0.5)'
-        ctx.font = '400 20px "LXGW WenKai GB", serif'
+        ctx.font = '400 20px "LXGW WenKai GB", "WeChatSansSS", serif'
         ctx.fillText('爻', 0, 7)
         ctx.restore()
         
@@ -185,7 +185,7 @@ Page({
         // 日期行
         const dateText = `${this.data.lunarYear || ''}  ·  ${this.data.lunarMonthDay || ''}`
         ctx.fillStyle = isDark ? '#7a7a70' : '#8A8580'
-        ctx.font = '22px "LXGW WenKai GB", serif'
+        ctx.font = '22px "LXGW WenKai GB", "WeChatSansSS", serif'
         ctx.textAlign = 'center'
         const dateW = ctx.measureText(dateText).width
         const lineW = 32
@@ -245,7 +245,7 @@ Page({
           
           // 字
           ctx.fillStyle = isDark ? '#d0d0c8' : '#1F1F1F'
-          ctx.font = 'bold 120px "LXGW WenKai GB", serif'
+          ctx.font = 'bold 120px "LXGW WenKai GB", "WeChatSansSS", serif'
           ctx.textAlign = 'center'
           ctx.fillText(words[i] || '', bx + boxSize / 2, y + boxSize / 2 + 40)
         }
@@ -282,7 +282,7 @@ Page({
           // 卦名
           if (this.data.hexagramName) {
             ctx.fillStyle = isDark ? '#b0b0a8' : '#3A3A35'
-            ctx.font = '30px "LXGW WenKai GB", serif'
+            ctx.font = '30px "LXGW WenKai GB", "WeChatSansSS", serif'
             ctx.textAlign = 'center'
             ctx.fillText(this.data.hexagramName, cx, y)
             y += 36 + 12
@@ -291,7 +291,7 @@ Page({
           // 卦辞
           if (this.data.hexagramText) {
             ctx.fillStyle = isDark ? '#8a8a80' : '#6B6860'
-            ctx.font = '24px "LXGW WenKai GB", serif'
+            ctx.font = '24px "LXGW WenKai GB", "WeChatSansSS", serif'
             ctx.textAlign = 'center'
             const ciText = this.data.hexagramText
             const maxCiW = contentW * 0.9
@@ -312,7 +312,7 @@ Page({
           y += 20
           ctx.strokeStyle = isDark ? '#444440' : '#E8E5DC'
           ctx.fillStyle = isDark ? '#9a9a90' : '#5A5850'
-          ctx.font = '22px "LXGW WenKai GB", serif'
+          ctx.font = '22px "LXGW WenKai GB", "WeChatSansSS", serif'
           ctx.textAlign = 'left'
           const yaoX = cardX + padding
           this.data.displayYaos.forEach((yaoText, idx) => {

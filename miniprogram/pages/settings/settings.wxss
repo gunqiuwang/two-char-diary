@@ -11,7 +11,7 @@
   transition: background-color 0.3s ease;
   position: relative;
   overflow-x: hidden;
-  font-family: "LXGW WenKai GB", "LXGW WenKai", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "WeChatSansSS", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
 }
 
 .setting-section {

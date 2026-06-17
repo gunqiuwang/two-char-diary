@@ -1,7 +1,7 @@
 /* app.wxss */
 page {
   background-color: #f5f4ed;
-  font-family: 'LXGW WenKai GB', 'LXGW WenKai', 'Songti SC', 'STSong', Georgia, serif;
+  font-family: 'LXGW WenKai GB', 'LXGW WenKai', 'WeChatSansSS', 'Songti SC', 'STSong', Georgia, serif;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
   color: #141413;

@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   padding: 0 40rpx calc(80rpx + env(safe-area-inset-bottom));
-  font-family: "LXGW WenKai GB", "LXGW WenKai", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "WeChatSansSS", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
@@ -102,7 +102,7 @@
   color: rgba(180, 40, 30, 0.5);
   font-weight: 400;
   transform: rotate(-12deg);
-  font-family: "LXGW WenKai GB", "LXGW WenKai", "Songti SC", serif;
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "WeChatSansSS", "Songti SC", serif;
   box-shadow:
     inset 0 0 4rpx rgba(180, 40, 30, 0.15),
     0 0 1rpx rgba(180, 40, 30, 0.1);
