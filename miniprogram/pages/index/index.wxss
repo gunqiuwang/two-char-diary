@@ -4,7 +4,7 @@
 .page {
   position: relative;
   height: 100vh;
-  background: #f5f4ed;
+  background: linear-gradient(180deg, #f5f4ed 0%, #f3f2eb 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -134,19 +134,21 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  border: 2rpx solid #C8C3B8;
+  border: 1rpx solid #C8C3B8;
   z-index: 2;
   pointer-events: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.03);
 }
 
 .mi-zi-box.active::before {
   border-color: #8A7E6B;
-  box-shadow: 0 0 0 4rpx rgba(138, 126, 107, 0.08);
+  box-shadow: 0 4rpx 16rpx rgba(138, 126, 107, 0.08);
 }
 
 .mi-zi-box.filled::before {
   border-color: #B0A99A;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
 }
 
 .mi-char {
@@ -164,12 +166,13 @@
 }
 
 .char-pop {
-  animation: charPop 400ms ease-out;
+  animation: charPop 300ms ease-out;
 }
 
 @keyframes charPop {
-  0% { transform: scale(0.8); opacity: 0.4; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: translateY(8rpx); opacity: 0; }
+  60% { transform: translateY(-2rpx); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 
 .mi-input {
@@ -263,18 +266,20 @@
 .candidate-item {
   padding: 10rpx 20rpx;
   background: transparent;
-  border: 2rpx solid #C8C3B8;
+  border: 1rpx solid #C8C3B8;
   border-radius: 4rpx;
   font-size: 22rpx;
   color: #3A3A35;
   letter-spacing: 2rpx;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.02);
 }
 
 .candidate-item:active {
   border-color: #8A7E6B;
   background: rgba(138, 126, 107, 0.06);
   transform: scale(0.92);
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
 }
 
 /* ===== 铜钱 / 卦象共用区 ===== */
@@ -311,6 +316,7 @@
   justify-content: center;
   animation: coinPulse 4s ease-in-out infinite;
   margin-top: 24rpx;
+  transition: transform 0.15s ease;
 }
 
 @keyframes coinPulse {
@@ -319,8 +325,15 @@
 }
 
 .coin-icon:active {
-  transform: scale(0.82);
-  animation: none;
+  animation: coinShake 0.3s ease-in-out;
+}
+
+@keyframes coinShake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+  75% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
 }
 
 .coin-outer {
