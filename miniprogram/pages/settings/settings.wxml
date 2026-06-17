@@ -23,21 +23,6 @@
     </view>
   </view>
 
-  <!-- 每日提醒 -->
-  <view class="setting-section">
-    <view class="setting-title">每日提醒</view>
-    <view class="setting-item">
-      <view class="setting-label">提醒时间</view>
-      <picker mode="time" value="{{reminderTime}}" bindchange="onTimeChange">
-        <view class="setting-value">{{reminderTime}}</view>
-      </picker>
-    </view>
-    <view class="setting-item">
-      <view class="setting-label">开启提醒</view>
-      <switch checked="{{reminderEnabled}}" bindchange="onReminderToggle" color="#B8A88A" />
-    </view>
-  </view>
-
   <!-- 数据管理 -->
   <view class="setting-section">
     <view class="setting-title">数据</view>

@@ -4,8 +4,6 @@ const { loadBgStyle, BG_MAP } = require('../../utils/common')
 Page({
   data: {
     statusBarHeight: 20,
-    reminderEnabled: false,
-    reminderTime: '21:00',
     bgStyle: 'xuan',
     bgClass: '',
     isDark: false,
@@ -19,28 +17,15 @@ Page({
 
   onLoad() {
     const sysInfo = wx.getWindowInfo()
-    const settings = wx.getStorageSync('settings') || {}
     const bg = loadBgStyle()
     this.setData({
       statusBarHeight: sysInfo.statusBarHeight || 20,
-      reminderEnabled: settings.reminderEnabled || false,
-      reminderTime: settings.reminderTime || '21:00',
       ...bg
     })
   },
 
   goBack() {
     wx.navigateBack()
-  },
-
-  onTimeChange(e) {
-    this.setData({ reminderTime: e.detail.value })
-    this.saveSettings()
-  },
-
-  onReminderToggle(e) {
-    this.setData({ reminderEnabled: e.detail.value })
-    this.saveSettings()
   },
 
   onBgStyleChange(e) {
@@ -51,8 +36,6 @@ Page({
 
   saveSettings() {
     wx.setStorageSync('settings', {
-      reminderEnabled: this.data.reminderEnabled,
-      reminderTime: this.data.reminderTime,
       bgStyle: this.data.bgStyle
     })
   },
