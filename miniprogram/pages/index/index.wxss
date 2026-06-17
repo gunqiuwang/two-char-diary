@@ -31,14 +31,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 36rpx;
+  justify-content: center;
+  gap: 48rpx;
   width: 100%;
+  padding-bottom: 120rpx;
 }
 
 /* 米字格固定位置 */
 .words-section {
-  margin-top: 80rpx;
+  margin-top: 0;
 }
 
 .paper-texture {
@@ -414,55 +415,41 @@
   line-height: 1.7;
 }
 
-/* ===== 分享印记 ===== */
-.share-mark {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6rpx;
-  margin-top: 8rpx;
-  transition: opacity 0.3s ease;
-  opacity: 0.7;
-}
-
-.share-mark:active {
-  opacity: 1;
-}
-
-.share-arrow {
-  font-size: 28rpx;
-  color: #6B6860;
-  line-height: 1;
-}
-
-.share-text {
-  font-size: 18rpx;
-  color: #A09888;
-  letter-spacing: 4rpx;
-}
-
-/* ===== 漂浮导航 ===== */
-.float-nav-left,
-.float-nav-right {
+/* ===== 底部导航 ===== */
+.float-nav {
   position: fixed;
   bottom: calc(48rpx + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
   z-index: 10;
-  padding: 16rpx;
+  display: flex;
+  justify-content: center;
+  gap: 80rpx;
   opacity: 0.35;
   transition: opacity 0.3s ease;
 }
 
-.float-nav-left:active,
-.float-nav-right:active {
+.float-nav:active {
   opacity: 0.7;
 }
 
-.float-nav-left {
-  left: 40rpx;
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
 }
 
-.float-nav-right {
-  right: 40rpx;
+.nav-arrow {
+  font-size: 28rpx;
+  color: #5A5850;
+  line-height: 1;
+}
+
+.nav-label {
+  font-size: 16rpx;
+  color: #5A5850;
+  letter-spacing: 2rpx;
 }
 
 /* 日历图标 — 展开的书 */
@@ -617,17 +604,13 @@
   color: #8a8a80;
 }
 
-.dark-page .share-arrow {
-  color: #8a8a80;
-}
-
-.dark-page .share-text {
-  color: #7a7a70;
-}
-
-.dark-page .float-nav-left,
-.dark-page .float-nav-right {
+.dark-page .float-nav {
   opacity: 0.5;
+}
+
+.dark-page .nav-label,
+.dark-page .nav-arrow {
+  color: #8a8a80;
 }
 
 .dark-page .icon-calendar::before,
