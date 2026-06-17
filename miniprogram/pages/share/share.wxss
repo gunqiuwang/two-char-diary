@@ -372,36 +372,40 @@
   color: #4A4A45;
 }
 
-/* ===== 操作按钮 ===== */
-.action-row {
+/* ===== 底部导航 ===== */
+.float-nav {
+  position: fixed;
+  bottom: calc(48rpx + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
+  z-index: 10;
   display: flex;
-  gap: 80rpx;
-  position: relative;
-  z-index: 1;
-  margin-top: 12rpx;
+  justify-content: space-between;
+  padding: 0 80rpx;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
 }
 
-.action-btn {
+.float-nav:active {
+  opacity: 0.7;
+}
+
+.nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14rpx;
-  transition: transform 0.3s ease;
+  gap: 8rpx;
 }
 
-.action-btn:active {
-  transform: scale(0.88);
-}
-
-.action-icon {
+.nav-icon {
   font-size: 28rpx;
   color: #5A5850;
   line-height: 1;
 }
 
-.action-label {
-  font-size: 22rpx;
-  color: #8A8580;
+.nav-label {
+  font-size: 16rpx;
+  color: #5A5850;
   letter-spacing: 2rpx;
 }
 
@@ -501,11 +505,12 @@
   color: #5a5a50;
 }
 
-.dark-page .action-icon {
-  color: #8a8a80;
+.dark-page .float-nav {
+  opacity: 0.5;
 }
 
-.dark-page .action-label {
+.dark-page .nav-label,
+.dark-page .nav-icon {
   color: #8a8a80;
 }
 

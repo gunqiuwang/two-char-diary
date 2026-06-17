@@ -34,7 +34,7 @@
   justify-content: center;
   gap: 48rpx;
   width: 100%;
-  padding-bottom: 120rpx;
+  padding-bottom: 80rpx;
 }
 
 /* 米字格固定位置 */

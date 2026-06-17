@@ -77,15 +77,19 @@
     </view>
   </view>
 
-  <!-- 操作按钮 -->
-  <view class="action-row anim-fade-in-d3">
-    <view class="action-btn" bindtap="saveImage">
-      <text class="action-icon">↓</text>
-      <text class="action-label">保存图片</text>
+  <!-- 底部操作按钮 -->
+  <view class="float-nav anim-fade-in-d3">
+    <view class="nav-item" bindtap="saveImage">
+      <text class="nav-icon">↓</text>
+      <text class="nav-label">保存</text>
     </view>
-    <view class="action-btn" bindtap="shareToFriend">
-      <text class="action-icon">↗</text>
-      <text class="action-label">发送朋友</text>
+    <view class="nav-item" bindtap="goBack">
+      <text class="nav-icon">←</text>
+      <text class="nav-label">返回</text>
+    </view>
+    <view class="nav-item" bindtap="shareToFriend">
+      <text class="nav-icon">↗</text>
+      <text class="nav-label">发送</text>
     </view>
   </view>
 
