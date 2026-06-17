@@ -73,19 +73,19 @@
 
       <!-- 卦象 -->
       <view class="hexagram-section" wx:if="{{castingState === 'result'}}">
-        <view class="hex-symbol anim-scale-in">{{hexagramSymbol}}</view>
+        <view class="hex-lines">
+          <view class="hex-line {{item.type === 'yang' ? 'yang' : 'yin'}} anim-line-in" wx:for="{{hexLines}}" wx:key="index" style="animation-delay: {{index * 80}}ms;"></view>
+        </view>
         <view class="hex-name anim-fade-in-d1">{{hexagramName}}</view>
         <view class="hex-meta anim-fade-in-d2">
           <text class="hex-ci">{{hexagramText}}</text>
         </view>
         <view class="hex-yaos">
-          <view class="hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{300 + index * 100}}ms;">
+          <view class="hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{480 + index * 60}}ms;">
             <text class="yao-text">{{item}}</text>
           </view>
         </view>
       </view>
-    </view>
-
     </view>
   </view>
 

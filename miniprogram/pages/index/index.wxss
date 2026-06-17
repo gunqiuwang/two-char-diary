@@ -69,6 +69,9 @@
 @keyframes popIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
 @keyframes slideIn { from { opacity: 0; transform: translateX(-16rpx); } to { opacity: 1; transform: translateX(0); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(24rpx); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lineIn { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+
+.anim-line-in { animation: lineIn 200ms ease-out both; }
 
 /* ===== 标题 + 印章 ===== */
 .nav-title {
@@ -364,12 +367,48 @@
   width: 100%;
 }
 
-.hex-symbol {
-  font-size: 100rpx;
-  color: #2F312B;
-  line-height: 1.15;
-  margin-bottom: 12rpx;
-  letter-spacing: 4rpx;
+.hex-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+}
+
+.hex-line {
+  height: 6rpx;
+  background: #2F312B;
+  border-radius: 3rpx;
+  transform-origin: center;
+}
+
+.hex-line.yang {
+  width: 120rpx;
+}
+
+.hex-line.yin {
+  width: 120rpx;
+  background: transparent;
+  position: relative;
+}
+
+.hex-line.yin::before,
+.hex-line.yin::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 48rpx;
+  background: #2F312B;
+  border-radius: 3rpx;
+}
+
+.hex-line.yin::before {
+  left: 0;
+}
+
+.hex-line.yin::after {
+  right: 0;
 }
 
 .hex-name {
@@ -423,8 +462,8 @@
   right: 0;
   z-index: 10;
   display: flex;
-  justify-content: center;
-  gap: 80rpx;
+  justify-content: space-between;
+  padding: 0 60rpx;
   opacity: 0.35;
   transition: opacity 0.3s ease;
 }
@@ -580,8 +619,17 @@
   color: #7a7a70;
 }
 
-.dark-page .hex-symbol {
-  color: #d0d0c8;
+.dark-page .hex-line {
+  background: #d0d0c8;
+}
+
+.dark-page .hex-line.yin {
+  background: transparent;
+}
+
+.dark-page .hex-line.yin::before,
+.dark-page .hex-line.yin::after {
+  background: #d0d0c8;
 }
 
 .dark-page .hex-name {

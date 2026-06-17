@@ -26,6 +26,7 @@ Page({
     hexagramSymbol: '',
     hexagramName: '',
     hexagramText: '',
+    hexLines: [],
 
     bgStyle: 'xuan',
     bgClass: '',
@@ -86,12 +87,14 @@ Page({
     if (d.yaos && d.yaos.length === 6) {
       const hex = this.getHex(d.yaos)
       const yaoTexts = d.yaoTexts || (hex.yaos ? hex.yaos.slice().reverse() : [])
+      const hexLines = d.yaos.slice().reverse().map(y => ({ type: y.type }))
       update.castingState = 'result'
       update.yaos = d.yaos
       update.displayYaos = yaoTexts
       update.hexagramSymbol = hex.symbol || ''
       update.hexagramName = hex.name
       update.hexagramText = hex.ci
+      update.hexLines = hexLines
     } else {
       update.castingState = 'idle'
       update.yaos = []
@@ -99,6 +102,7 @@ Page({
       update.hexagramSymbol = ''
       update.hexagramName = ''
       update.hexagramText = ''
+      update.hexLines = []
     }
 
     this.setData(update)
@@ -233,13 +237,15 @@ Page({
     for (let i = 0; i < 6; i++) yaos.push(this.genYao())
     const hex = this.getHex(yaos)
     const yaoTexts = (hex.yaos || []).slice().reverse()
+    const hexLines = yaos.slice().reverse().map(y => ({ type: y.type }))
     this.setData({
       castingState: 'result',
       yaos,
       displayYaos: yaoTexts,
       hexagramSymbol: hex.symbol || '',
       hexagramName: hex.name,
-      hexagramText: hex.ci
+      hexagramText: hex.ci,
+      hexLines
     })
     this.saveHex(yaoTexts)
   },
