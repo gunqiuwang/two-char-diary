@@ -119,7 +119,9 @@ Page({
     const update = {
       showCandidates: true,
       focus1: idx === 0,
-      focus2: idx === 1
+      focus2: idx === 1,
+      input1: this.data.chars[0] || '',
+      input2: this.data.chars[1] || ''
     }
     if (this.data.isRecorded) update.isRecorded = false
     this.setData(update)
