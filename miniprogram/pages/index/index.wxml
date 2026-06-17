@@ -65,8 +65,10 @@
       <!-- 铜钱 -->
       <view class="coin-wrap" wx:if="{{castingState !== 'result'}}">
         <view class="coin-icon" bindtap="startCasting">
-          <view class="coin-outer"></view>
-          <view class="coin-inner"></view>
+          <view class="coin-inner-group">
+            <view class="coin-outer"></view>
+            <view class="coin-inner"></view>
+          </view>
         </view>
         <text class="coin-label">起课</text>
       </view>

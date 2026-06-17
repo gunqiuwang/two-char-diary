@@ -315,10 +315,16 @@
   align-items: center;
   justify-content: center;
   margin-top: 24rpx;
+  position: relative;
 }
 
-.coin-icon .coin-outer,
-.coin-icon .coin-inner {
+.coin-inner-group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: coinPulse 4s ease-in-out infinite;
 }
 
@@ -327,16 +333,16 @@
   50% { transform: scale(1.06); opacity: 1; }
 }
 
-.coin-icon:active {
+.coin-icon:active .coin-inner-group {
   animation: coinShake 0.3s ease-in-out;
 }
 
 @keyframes coinShake {
   0% { transform: rotate(0deg); }
-  20% { transform: rotate(-10deg); }
-  40% { transform: rotate(10deg); }
-  60% { transform: rotate(-6deg); }
-  80% { transform: rotate(6deg); }
+  20% { transform: rotate(-12deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(8deg); }
   100% { transform: rotate(0deg); }
 }
 
