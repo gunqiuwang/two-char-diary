@@ -26,10 +26,6 @@
   <!-- 数据管理 -->
   <view class="setting-section">
     <view class="setting-title">数据</view>
-    <view class="setting-item" bindtap="exportData">
-      <view class="setting-label">导出记录</view>
-      <view class="setting-arrow">›</view>
-    </view>
     <view class="setting-item" bindtap="clearData">
       <view class="setting-label">清除所有数据</view>
       <view class="setting-arrow">›</view>

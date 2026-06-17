@@ -40,30 +40,6 @@ Page({
     })
   },
 
-  exportData() {
-    const diaryData = wx.getStorageSync('diary_data') || {}
-    const keys = Object.keys(diaryData)
-    if (keys.length === 0) {
-      wx.showToast({ title: '暂无数据', icon: 'none' })
-      return
-    }
-
-    let text = '二字日记导出\n\n'
-    keys.sort().reverse().forEach(date => {
-      const d = diaryData[date]
-      text += `${date}  ${d.words}`
-      if (d.hexagramName) text += `  ${d.hexagramName}`
-      text += '\n'
-    })
-
-    wx.setClipboardData({
-      data: text,
-      success: () => {
-        wx.showToast({ title: '已复制到剪贴板', icon: 'success' })
-      }
-    })
-  },
-
   clearData() {
     wx.showModal({
       title: '确认清除',
