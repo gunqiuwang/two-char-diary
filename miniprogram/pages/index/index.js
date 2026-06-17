@@ -5,7 +5,6 @@ const { solarToLunar } = require('../../utils/lunar')
 const { getRandomWords } = require('../../utils/words')
 const { getTodayKey, loadBgStyle } = require('../../utils/common')
 const { getSpecialDate, getDailyWords } = require('../../utils/solarterm')
-const { getSpecialDate, getDailyWords } = require('../../utils/solarterm')
 
 Page({
   data: {
