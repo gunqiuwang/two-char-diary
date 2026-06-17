@@ -1,4 +1,6 @@
 // pages/settings/settings.js
+const { loadBgStyle, BG_MAP } = require('../../utils/common')
+
 Page({
   data: {
     statusBarHeight: 20,
@@ -18,15 +20,12 @@ Page({
   onLoad() {
     const sysInfo = wx.getWindowInfo()
     const settings = wx.getStorageSync('settings') || {}
-    const bgStyle = settings.bgStyle || 'xuan'
-    const bgMap = { xuan: '', silk: 'paper-texture-silk', bamboo: 'paper-texture-bamboo', dark: 'paper-texture-dark' }
+    const bg = loadBgStyle()
     this.setData({
       statusBarHeight: sysInfo.statusBarHeight || 20,
       reminderEnabled: settings.reminderEnabled || false,
       reminderTime: settings.reminderTime || '21:00',
-      bgStyle,
-      bgClass: bgMap[bgStyle] || '',
-      isDark: bgStyle === 'dark'
+      ...bg
     })
   },
 
@@ -46,8 +45,7 @@ Page({
 
   onBgStyleChange(e) {
     const key = e.currentTarget.dataset.key
-    const bgMap = { xuan: '', silk: 'paper-texture-silk', bamboo: 'paper-texture-bamboo', dark: 'paper-texture-dark' }
-    this.setData({ bgStyle: key, bgClass: bgMap[key] || '', isDark: key === 'dark' })
+    this.setData({ bgStyle: key, bgClass: BG_MAP[key] || '', isDark: key === 'dark' })
     this.saveSettings()
   },
 

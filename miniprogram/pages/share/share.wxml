@@ -75,10 +75,16 @@
     </view>
   </view>
 
-  <!-- 操作印记 -->
+  <!-- 操作按钮 -->
   <view class="action-row anim-fade-in-d3">
-    <text class="action-mark" bindtap="saveImage">↓</text>
-    <text class="action-mark" bindtap="shareToFriend">↗</text>
+    <view class="action-btn" bindtap="saveImage">
+      <text class="action-icon">↓</text>
+      <text class="action-label">保存图片</text>
+    </view>
+    <view class="action-btn" bindtap="shareToFriend">
+      <text class="action-icon">↗</text>
+      <text class="action-label">发送朋友</text>
+    </view>
   </view>
 
   <canvas type="2d" id="shareCanvas" class="hidden-canvas"></canvas>

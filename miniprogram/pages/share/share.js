@@ -1,5 +1,6 @@
 // pages/share/share.js
 const { solarToLunar } = require('../../utils/lunar')
+const { getTodayKey, loadBgStyle, BG_MAP } = require('../../utils/common')
 
 Page({
   data: {
@@ -27,7 +28,7 @@ Page({
     this.setData({ statusBarHeight: sysInfo.statusBarHeight || 20 })
     this.loadBgStyle()
 
-    const today = this.getTodayKey()
+        const today = getTodayKey()
     const diaryData = wx.getStorageSync('diary_data') || {}
     const stored = diaryData[today] || {}
 
@@ -48,26 +49,18 @@ Page({
     }
   },
 
-  getTodayKey() {
-    const now = new Date()
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
-  },
-
   goBack() {
     wx.navigateBack()
   },
 
   loadBgStyle() {
-    const settings = wx.getStorageSync('settings') || {}
-    const bgStyle = settings.bgStyle || 'xuan'
-    const bgMap = { xuan: '', silk: 'paper-texture-silk', bamboo: 'paper-texture-bamboo', dark: 'paper-texture-dark' }
-    this.setData({ bgStyle, bgClass: bgMap[bgStyle] || '', isDark: bgStyle === 'dark' })
+    const bg = loadBgStyle()
+    this.setData(bg)
   },
 
   onBgStyleChange(e) {
     const key = e.currentTarget.dataset.key
-    const bgMap = { xuan: '', silk: 'paper-texture-silk', bamboo: 'paper-texture-bamboo', dark: 'paper-texture-dark' }
-    this.setData({ bgStyle: key, bgClass: bgMap[key] || '', isDark: key === 'dark' })
+    this.setData({ bgStyle: key, bgClass: BG_MAP[key] || '', isDark: key === 'dark' })
     const settings = wx.getStorageSync('settings') || {}
     settings.bgStyle = key
     wx.setStorageSync('settings', settings)
@@ -97,7 +90,7 @@ Page({
     return new Promise((resolve, reject) => {
       let words = this.data.words
       if (!words) {
-        const today = this.getTodayKey()
+    const today = getTodayKey()
         const diaryData = wx.getStorageSync('diary_data') || {}
         const stored = diaryData[today] || {}
         words = stored.words || ''
@@ -174,7 +167,7 @@ Page({
 
         wx.canvasToTempFilePath({
           canvas, x: 0, y: 0, width: w, height: h,
-          destWidth: w * 2, destHeight: h * 2,
+          destWidth: w * dpr, destHeight: h * dpr,
           success: (r) => resolve(r.tempFilePath),
           fail: reject
         })

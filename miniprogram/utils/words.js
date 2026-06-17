@@ -30,7 +30,7 @@ const WORD_CATEGORIES = {
 
   // 人际关系
   people: [
-    '相聚', '离别', '重逢', '思念', '陪伴',
+    '相聚', '离别', '重逢', '惦念', '陪伴',
     '独处', '畅谈', '默契', '牵挂', '感恩'
   ],
 
@@ -60,9 +60,12 @@ function getRandomWords(count = 8) {
     allWords.push(...words)
   })
 
-  // 随机打乱并取指定数量
-  const shuffled = allWords.sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, count)
+  // Fisher-Yates 洗牌
+  for (let i = allWords.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allWords[i], allWords[j]] = [allWords[j], allWords[i]]
+  }
+  return allWords.slice(0, count)
 }
 
 // 获取指定分类的备选词

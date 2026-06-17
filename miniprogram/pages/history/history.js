@@ -1,7 +1,30 @@
 // pages/history/history.js
+const { loadBgStyle } = require('../../utils/common')
+
 Page({
   data: {
-    historyList: []
+    statusBarHeight: 20,
+    historyList: [],
+    bgStyle: 'xuan',
+    bgClass: '',
+    isDark: false
+  },
+
+  onLoad() {
+    const sysInfo = wx.getWindowInfo()
+    this.setData({ statusBarHeight: sysInfo.statusBarHeight || 20 })
+    this.loadBgStyle()
+    this.loadHistory()
+  },
+
+  onShow() {
+    this.loadBgStyle()
+    this.loadHistory()
+  },
+
+  loadBgStyle() {
+    const bg = loadBgStyle()
+    this.setData(bg)
   },
 
   onLoad() {

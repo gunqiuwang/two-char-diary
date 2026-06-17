@@ -1,5 +1,6 @@
 // pages/calendar/calendar.js
 const { solarToLunar } = require('../../utils/lunar')
+const { getTodayKey, loadBgStyle, BG_MAP } = require('../../utils/common')
 
 const MONTH_NAMES = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月']
 const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
@@ -52,15 +53,12 @@ Page({
   },
 
   loadBgStyle() {
-    const settings = wx.getStorageSync('settings') || {}
-    const bgStyle = settings.bgStyle || 'xuan'
-    const bgMap = { xuan: '', silk: 'paper-texture-silk', bamboo: 'paper-texture-bamboo', dark: 'paper-texture-dark' }
-    const isDark = bgStyle === 'dark'
+    const bg = loadBgStyle()
     const activeColorMap = { xuan: '#3A3A35', silk: '#a09070', bamboo: '#8a9a80', dark: '#7a7a70' }
-    const color = activeColorMap[bgStyle] || '#3A3A35'
-    const textColor = isDark ? '#2a2a28' : '#f5f4ed'
+    const color = activeColorMap[bg.bgStyle] || '#3A3A35'
+    const textColor = bg.isDark ? '#2a2a28' : '#f5f4ed'
     const monthActiveStyle = `background:${color};border-color:${color};color:${textColor}`
-    this.setData({ bgStyle, bgClass: bgMap[bgStyle] || '', isDark, monthActiveStyle })
+    this.setData({ ...bg, monthActiveStyle })
   },
 
   loadRecords() {

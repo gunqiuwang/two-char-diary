@@ -13,21 +13,14 @@ App({
   loadFont() {
     wx.loadFontFace({
       family: 'LXGW WenKai GB',
-      source: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css',
+      source: 'https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-webfont/1.7.0/style.css',
       success: () => { this.globalData.fontLoaded = true },
       fail: () => { this.globalData.fontLoaded = false }
-    })
-    wx.loadFontFace({
-      family: 'Noto Serif SC',
-      source: 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap',
-      success: () => { this.globalData.serifFontLoaded = true },
-      fail: () => { this.globalData.serifFontLoaded = false }
     })
   },
 
   globalData: {
     fontLoaded: false,
-    serifFontLoaded: false,
 
     // 六十四卦数据（含Unicode卦符）
     hexagrams: {

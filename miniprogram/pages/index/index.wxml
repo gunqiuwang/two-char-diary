@@ -14,6 +14,8 @@
     </view>
     <view class="date-section anim-fade-in-d1">
       <view class="date-row">
+        <text class="date-solar">{{solarDate}}</text>
+        <view class="date-dot"></view>
         <text class="date-year">{{lunarYear}}</text>
         <view class="date-dot"></view>
         <text class="date-day">{{lunarMonthDay}}</text>
@@ -66,6 +68,7 @@
           <view class="coin-outer"></view>
           <view class="coin-inner"></view>
         </view>
+        <text class="coin-label">起课</text>
       </view>
 
       <!-- 卦象 -->
@@ -84,7 +87,10 @@
     </view>
 
     <!-- 分享印记 -->
-    <view class="share-mark anim-fade-in-d3" wx:if="{{castingState === 'result' && isRecorded}}" bindtap="goToShare">↗</view>
+    <view class="share-mark anim-fade-in-d3" wx:if="{{castingState === 'result' && isRecorded}}" bindtap="goToShare">
+      <text class="share-arrow">↗</text>
+      <text class="share-text">分享</text>
+    </view>
   </view>
 
   <!-- 漂浮导航印记 -->

@@ -290,7 +290,7 @@
   text-align: center;
   margin-bottom: 24rpx;
   line-height: 1.1;
-  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  font-family: "LXGW WenKai GB", "LXGW WenKai", "Songti SC", serif;
 }
 
 .detail-hex {
