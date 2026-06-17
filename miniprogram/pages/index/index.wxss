@@ -372,22 +372,22 @@
   flex-direction: column;
   align-items: center;
   gap: 10rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
 }
 
 .hex-line {
-  height: 6rpx;
+  height: 4rpx;
   background: #2F312B;
-  border-radius: 3rpx;
+  border-radius: 2rpx;
   transform-origin: center;
 }
 
 .hex-line.yang {
-  width: 120rpx;
+  width: 72rpx;
 }
 
 .hex-line.yin {
-  width: 120rpx;
+  width: 72rpx;
   background: transparent;
   position: relative;
 }
@@ -398,9 +398,9 @@
   position: absolute;
   top: 0;
   height: 100%;
-  width: 48rpx;
+  width: 28rpx;
   background: #2F312B;
-  border-radius: 3rpx;
+  border-radius: 2rpx;
 }
 
 .hex-line.yin::before {
@@ -463,7 +463,7 @@
   z-index: 10;
   display: flex;
   justify-content: space-between;
-  padding: 0 60rpx;
+  padding: 0 80rpx;
   opacity: 0.35;
   transition: opacity 0.3s ease;
 }

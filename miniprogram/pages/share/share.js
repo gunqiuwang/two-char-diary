@@ -8,10 +8,10 @@ Page({
     lunarYear: '',
     lunarMonthDay: '',
     words: '',
-    hexagramSymbol: '',
     hexagramName: '',
     hexagramText: '',
     displayYaos: [],
+    hexLines: [],
     bgStyle: 'xuan',
     bgClass: '',
     isDark: false,
@@ -35,14 +35,15 @@ Page({
     if (stored.words) {
       const now = new Date()
       const lunar = solarToLunar(now.getFullYear(), now.getMonth() + 1, now.getDate())
+      const hexLines = stored.yaos ? stored.yaos.slice().reverse().map(y => ({ type: y.type })) : []
       this.setData({
         lunarYear: stored.lunarYear || `${lunar.ganZhiYear}年`,
         lunarMonthDay: stored.lunarMonthDay || `${lunar.monthText}${lunar.dayText}`,
         words: stored.words,
-        hexagramSymbol: stored.hexagramSymbol || '',
         hexagramName: stored.hexagramName || '',
         hexagramText: stored.hexagramText || '',
-        displayYaos: stored.yaoTexts || []
+        displayYaos: stored.yaoTexts || [],
+        hexLines
       })
     } else {
       wx.showToast({ title: '数据加载失败', icon: 'none' })

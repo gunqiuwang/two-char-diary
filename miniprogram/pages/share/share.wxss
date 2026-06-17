@@ -232,11 +232,47 @@
   width: 100%;
 }
 
-.card-hex-symbol {
-  font-size: 80rpx;
-  color: #2F312B;
-  line-height: 1.15;
-  margin-bottom: 4rpx;
+.card-hex-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.card-hex-line {
+  height: 4rpx;
+  background: #2F312B;
+  border-radius: 2rpx;
+}
+
+.card-hex-line.yang {
+  width: 72rpx;
+}
+
+.card-hex-line.yin {
+  width: 72rpx;
+  background: transparent;
+  position: relative;
+}
+
+.card-hex-line.yin::before,
+.card-hex-line.yin::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 28rpx;
+  background: #2F312B;
+  border-radius: 2rpx;
+}
+
+.card-hex-line.yin::before {
+  left: 0;
+}
+
+.card-hex-line.yin::after {
+  right: 0;
 }
 
 .card-hex-name {
@@ -432,8 +468,17 @@
   background: #3a3a38;
 }
 
-.dark-page .card-hex-symbol {
-  color: #d0d0c8;
+.dark-page .card-hex-line {
+  background: #d0d0c8;
+}
+
+.dark-page .card-hex-line.yin {
+  background: transparent;
+}
+
+.dark-page .card-hex-line.yin::before,
+.dark-page .card-hex-line.yin::after {
+  background: #d0d0c8;
 }
 
 .dark-page .card-hex-name {
@@ -513,8 +558,17 @@
   background: #3a3a38;
 }
 
-.card-dark .card-hex-symbol {
-  color: #d0d0c8;
+.card-dark .card-hex-line {
+  background: #d0d0c8;
+}
+
+.card-dark .card-hex-line.yin {
+  background: transparent;
+}
+
+.card-dark .card-hex-line.yin::before,
+.card-dark .card-hex-line.yin::after {
+  background: #d0d0c8;
 }
 
 .card-dark .card-hex-name {

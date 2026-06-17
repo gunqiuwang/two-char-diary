@@ -50,12 +50,14 @@
     </view>
 
     <!-- 卦象 -->
-    <view class="card-hex-section" wx:if="{{hexagramSymbol}}">
-      <view class="card-hex-symbol anim-scale-in" style="animation-delay: 300ms;">{{hexagramSymbol}}</view>
+    <view class="card-hex-section" wx:if="{{hexLines.length}}">
+      <view class="card-hex-lines">
+        <view class="card-hex-line {{item.type === 'yang' ? 'yang' : 'yin'}}" wx:for="{{hexLines}}" wx:key="index"></view>
+      </view>
       <view class="card-hex-name anim-fade-in-d2">{{hexagramName}}</view>
       <view class="card-hex-ci anim-fade-in-d2">{{hexagramText}}</view>
       <view class="card-hex-yaos" wx:if="{{displayYaos.length}}">
-        <view class="card-hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{400 + index * 100}}ms;">
+        <view class="card-hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{index * 60}}ms;">
           <text class="card-yao-text">{{item}}</text>
         </view>
       </view>
