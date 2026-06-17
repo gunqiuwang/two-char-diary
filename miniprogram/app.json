@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/share/share",
     "pages/calendar/calendar",
+    "pages/history/history",
     "pages/settings/settings"
   ],
   "window": {

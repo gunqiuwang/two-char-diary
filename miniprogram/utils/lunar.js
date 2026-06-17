@@ -67,7 +67,8 @@ function solarToLunar(year, month, day) {
   // 计算农历年
   let lunarYear = 1900
   let yearDaysCount
-  for (lunarYear = 1900; lunarYear < 2101 && offset > 0; lunarYear++) {
+  const maxYear = LUNAR_INFO.length + 1900
+  for (lunarYear = 1900; lunarYear < maxYear && offset > 0; lunarYear++) {
     yearDaysCount = lunarYearDays(lunarYear)
     offset -= yearDaysCount
   }

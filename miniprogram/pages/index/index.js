@@ -142,24 +142,6 @@ Page({
         focus2: false
       })
       this.saveWords()
-    } else {
-      if (!this.data.chars[0]) {
-        this.setData({
-          chars: [word, this.data.chars[1]],
-          input1: word,
-          focus1: false,
-          focus2: true
-        })
-      } else if (!this.data.chars[1]) {
-        this.setData({
-          chars: [this.data.chars[0], word],
-          input2: word,
-          showCandidates: false,
-          focus1: false,
-          focus2: false
-        })
-        this.saveWords()
-      }
     }
   },
 

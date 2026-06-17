@@ -28,7 +28,7 @@
     <!-- 米字框：视觉主体 -->
     <view class="words-section">
       <view class="mi-zi-area">
-        <view class="mi-zi-box anim-scale-in {{activeIndex === 0 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="0" bindtap="onBoxTap" style="animation-delay: 200ms;">
+        <view class="mi-zi-box anim-scale-in {{focus1 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="0" bindtap="onBoxTap" style="animation-delay: 200ms;">
           <view class="grid-h"></view>
           <view class="grid-v"></view>
           <view class="grid-d1"></view>
@@ -36,7 +36,7 @@
           <text class="mi-char {{chars[0] ? 'char-pop' : ''}}">{{chars[0] || ''}}</text>
           <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input1}}" bindinput="onInput1" bindblur="onBlur1" bindfocus="onFocus1" />
         </view>
-        <view class="mi-zi-box anim-scale-in {{activeIndex === 1 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="1" bindtap="onBoxTap" style="animation-delay: 320ms;">
+        <view class="mi-zi-box anim-scale-in {{focus2 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="1" bindtap="onBoxTap" style="animation-delay: 320ms;">
           <view class="grid-h"></view>
           <view class="grid-v"></view>
           <view class="grid-d1"></view>

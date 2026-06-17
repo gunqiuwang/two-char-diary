@@ -1,12 +1,9 @@
 // app.js
 App({
   onLaunch() {
-    // 初始化本地存储
     if (!wx.getStorageSync('diary_data')) {
       wx.setStorageSync('diary_data', {})
     }
-
-    // 加载霞鹜文楷字体
     this.loadFont()
   },
 
@@ -17,6 +14,12 @@ App({
       success: () => { this.globalData.fontLoaded = true },
       fail: () => { this.globalData.fontLoaded = false }
     })
+  },
+
+  globalData: {
+    fontLoaded: false
+  }
+})
   },
 
   globalData: {
