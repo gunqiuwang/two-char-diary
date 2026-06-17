@@ -32,12 +32,16 @@
     </view>
   </view>
 
-  <!-- 关于 -->
+  <!-- 更多 -->
   <view class="setting-section">
-    <view class="setting-title">关于</view>
-    <view class="setting-item">
-      <view class="setting-label">版本</view>
-      <view class="setting-value">1.0.0</view>
+    <view class="setting-title">更多</view>
+    <button class="setting-item share-btn" open-type="share">
+      <view class="setting-label">分享小程序</view>
+      <view class="setting-arrow">›</view>
+    </button>
+    <view class="setting-item" bindtap="showAbout">
+      <view class="setting-label">关于我们</view>
+      <view class="setting-arrow">›</view>
     </view>
   </view>
 </view>

@@ -129,6 +129,22 @@
   margin-bottom: 2rpx;
 }
 
+.share-btn {
+  width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  background: #faf9f5;
+  border: 1rpx solid #E8E5DC;
+  border-radius: 4rpx;
+  margin-bottom: 2rpx;
+  padding: 24rpx 20rpx;
+}
+
+.share-btn::after {
+  border: none;
+}
+
 .setting-item:first-of-type {
   border-radius: 4rpx 4rpx 0 0;
 }

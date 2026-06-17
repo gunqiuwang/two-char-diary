@@ -53,5 +53,21 @@ Page({
         }
       }
     })
+  },
+
+  showAbout() {
+    wx.showModal({
+      title: '二字爻记',
+      content: '每天用两个字和一卦记录当天\n\n极简 · 克制 · 安静\n\n数据存储在本地，不会上传',
+      showCancel: false,
+      confirmText: '知道了'
+    })
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '二字爻记 - 每天用两个字记录一天',
+      path: '/pages/index/index'
+    }
   }
 })
