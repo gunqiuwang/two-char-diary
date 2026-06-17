@@ -122,22 +122,22 @@ Page({
         
         // 卡片尺寸
         const cardW = 670
-        const padding = 48
+        const padding = 60
         const contentW = cardW - padding * 2
         
-        // 计算卡片高度
-        let cardH = padding + 30 + 40 + 36 + 160 + 40 // 标题 + 日期 + 米字格 + 间距
+        // 计算卡片高度（更宽松的间距）
+        let cardH = padding + 30 + 50 + 36 + 160 + 50 // 标题 + 日期 + 米字格 + 间距
         if (this.data.hexLines && this.data.hexLines.length === 6) {
-          cardH += 6 * 14 + 16 + 28 + 22 + 8 // 爻线 + 卦名 + 卦辞
+          cardH += 6 * 18 + 30 + 36 + 30 + 16 // 爻线 + 卦名 + 卦辞（更大间距）
         }
         if (this.data.displayYaos && this.data.displayYaos.length) {
-          cardH += 12 + this.data.displayYaos.length * 30
+          cardH += 20 + this.data.displayYaos.length * 36
         }
-        cardH += padding
+        cardH += padding + 20
         
-        // 画布尺寸
+        // 画布尺寸（更大的画布）
         const w = 750
-        const ch = cardH + 120
+        const ch = cardH + 160
         canvas.width = w * dpr
         canvas.height = ch * dpr
         ctx.scale(dpr, dpr)
@@ -150,7 +150,7 @@ Page({
         
         // 卡片背景
         const cardX = (w - cardW) / 2
-        const cardY = 60
+        const cardY = 80
         this.drawRoundRect(ctx, cardX, cardY, cardW, cardH, 12)
         ctx.fillStyle = cardBg
         ctx.fill()
@@ -162,7 +162,7 @@ Page({
         
         // 标题 "二字爻记" + 印章
         ctx.fillStyle = isDark ? '#d0d0c8' : '#2F312B'
-        ctx.font = '500 30px "LXGW WenKai GB", serif'
+        ctx.font = '500 32px "LXGW WenKai GB", serif'
         ctx.textAlign = 'center'
         ctx.fillText('二字爻记', cx - 14, y + 20)
         
@@ -180,12 +180,12 @@ Page({
         ctx.fillText('爻', 0, 7)
         ctx.restore()
         
-        y += 30 + 40
+        y += 30 + 50
         
         // 日期行
         const dateText = `${this.data.lunarYear || ''}  ·  ${this.data.lunarMonthDay || ''}`
         ctx.fillStyle = isDark ? '#7a7a70' : '#8A8580'
-        ctx.font = '20px "LXGW WenKai GB", serif'
+        ctx.font = '22px "LXGW WenKai GB", serif'
         ctx.textAlign = 'center'
         const dateW = ctx.measureText(dateText).width
         const lineW = 32
@@ -202,11 +202,11 @@ Page({
         ctx.lineTo(cx + dateW / 2 + lineGap + lineW, y - 4)
         ctx.stroke()
         
-        y += 36 + 40
+        y += 36 + 50
         
         // 米字格
         const boxSize = 160
-        const boxGap = 36
+        const boxGap = 48
         const box1X = cx - boxSize - boxGap / 2
         const box2X = cx + boxGap / 2
         
@@ -249,7 +249,7 @@ Page({
           ctx.textAlign = 'center'
           ctx.fillText(words[i] || '', bx + boxSize / 2, y + boxSize / 2 + 40)
         }
-        y += boxSize + 40
+        y += boxSize + 50
         
         // 卦象
         if (this.data.hexLines && this.data.hexLines.length === 6) {
@@ -259,69 +259,69 @@ Page({
           
           for (let i = 0; i < 6; i++) {
             const line = this.data.hexLines[i]
-            const lineY = y + i * 14
+            const lineY = y + i * 18
             
             if (line.type === 'yang') {
               ctx.beginPath()
-              ctx.moveTo(cx - 36, lineY)
-              ctx.lineTo(cx + 36, lineY)
+              ctx.moveTo(cx - 40, lineY)
+              ctx.lineTo(cx + 40, lineY)
               ctx.stroke()
             } else {
               ctx.beginPath()
-              ctx.moveTo(cx - 36, lineY)
-              ctx.lineTo(cx - 6, lineY)
+              ctx.moveTo(cx - 40, lineY)
+              ctx.lineTo(cx - 8, lineY)
               ctx.stroke()
               ctx.beginPath()
-              ctx.moveTo(cx + 6, lineY)
-              ctx.lineTo(cx + 36, lineY)
+              ctx.moveTo(cx + 8, lineY)
+              ctx.lineTo(cx + 40, lineY)
               ctx.stroke()
             }
           }
-          y += 6 * 14 + 16
+          y += 6 * 18 + 30
           
           // 卦名
           if (this.data.hexagramName) {
             ctx.fillStyle = isDark ? '#b0b0a8' : '#3A3A35'
-            ctx.font = '28px "LXGW WenKai GB", serif'
+            ctx.font = '30px "LXGW WenKai GB", serif'
             ctx.textAlign = 'center'
             ctx.fillText(this.data.hexagramName, cx, y)
-            y += 28 + 6
+            y += 36 + 12
           }
           
           // 卦辞
           if (this.data.hexagramText) {
             ctx.fillStyle = isDark ? '#8a8a80' : '#6B6860'
-            ctx.font = '22px "LXGW WenKai GB", serif'
+            ctx.font = '24px "LXGW WenKai GB", serif'
             ctx.textAlign = 'center'
             const ciText = this.data.hexagramText
             const maxCiW = contentW * 0.9
             if (ctx.measureText(ciText).width > maxCiW) {
               const mid = Math.ceil(ciText.length / 2)
               ctx.fillText(ciText.substring(0, mid), cx, y)
-              ctx.fillText(ciText.substring(mid), cx, y + 28)
-              y += 56
+              ctx.fillText(ciText.substring(mid), cx, y + 30)
+              y += 60
             } else {
               ctx.fillText(ciText, cx, y)
-              y += 28 + 8
+              y += 30 + 16
             }
           }
         }
         
         // 爻辞
         if (this.data.displayYaos && this.data.displayYaos.length) {
-          y += 12
+          y += 20
           ctx.strokeStyle = isDark ? '#444440' : '#E8E5DC'
           ctx.fillStyle = isDark ? '#9a9a90' : '#5A5850'
-          ctx.font = '20px "LXGW WenKai GB", serif'
+          ctx.font = '22px "LXGW WenKai GB", serif'
           ctx.textAlign = 'left'
           const yaoX = cardX + padding
           this.data.displayYaos.forEach((yaoText, idx) => {
             ctx.fillText(yaoText, yaoX, y)
-            y += 30
+            y += 36
             if (idx < this.data.displayYaos.length - 1) {
               ctx.beginPath()
-              ctx.moveTo(yaoX, y - 8)
-              ctx.lineTo(yaoX + contentW, y - 8)
+              ctx.moveTo(yaoX, y - 10)
+              ctx.lineTo(yaoX + contentW, y - 10)
               ctx.stroke()
             }
           })

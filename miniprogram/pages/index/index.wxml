@@ -33,7 +33,7 @@
           <view class="grid-v"></view>
           <view class="grid-d1"></view>
           <view class="grid-d2"></view>
-          <text class="mi-char {{chars[0] ? 'char-pop' : ''}}">{{chars[0] || ''}}</text>
+          <text class="mi-char {{chars[0] && !focus1 ? 'char-pop' : ''}}" wx:if="{{!focus1 || !chars[0]}}">{{chars[0] || ''}}</text>
           <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input1}}" bindinput="onInput1" bindblur="onBlur1" bindfocus="onFocus1" />
         </view>
         <view class="mi-zi-box anim-scale-in {{focus2 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="1" bindtap="onBoxTap" style="animation-delay: 320ms;">
@@ -41,7 +41,7 @@
           <view class="grid-v"></view>
           <view class="grid-d1"></view>
           <view class="grid-d2"></view>
-          <text class="mi-char {{chars[1] ? 'char-pop' : ''}}">{{chars[1] || ''}}</text>
+          <text class="mi-char {{chars[1] && !focus2 ? 'char-pop' : ''}}" wx:if="{{!focus2 || !chars[1]}}">{{chars[1] || ''}}</text>
           <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input2}}" bindinput="onInput2" bindblur="onBlur2" bindfocus="onFocus2" />
         </view>
       </view>

@@ -314,9 +314,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: coinPulse 4s ease-in-out infinite;
   margin-top: 24rpx;
-  transition: transform 0.15s ease;
+}
+
+.coin-icon .coin-outer,
+.coin-icon .coin-inner {
+  animation: coinPulse 4s ease-in-out infinite;
 }
 
 @keyframes coinPulse {
@@ -330,9 +333,10 @@
 
 @keyframes coinShake {
   0% { transform: rotate(0deg); }
-  25% { transform: rotate(-8deg); }
-  50% { transform: rotate(8deg); }
-  75% { transform: rotate(-4deg); }
+  20% { transform: rotate(-10deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-6deg); }
+  80% { transform: rotate(6deg); }
   100% { transform: rotate(0deg); }
 }
 
