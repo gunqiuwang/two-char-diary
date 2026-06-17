@@ -46,10 +46,10 @@
         </view>
       </view>
 
-      <!-- 备选词 -->
+      <!-- 灵感词 -->
       <view class="candidates" wx:if="{{showCandidates && !isRecorded}}">
         <view class="candidates-header">
-          <text class="candidates-title">备选词</text>
+          <text class="candidates-title">灵感词</text>
           <view class="candidates-refresh" bindtap="refreshCandidates">换一批</view>
         </view>
         <view class="candidates-grid">

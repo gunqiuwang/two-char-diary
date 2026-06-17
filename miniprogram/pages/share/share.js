@@ -133,36 +133,56 @@ Page({
         ctx.fillText(words, cx, 340)
 
         let y = 440
-        if (this.data.hexagramSymbol) {
+        if (this.data.hexLines && this.data.hexLines.length === 6) {
           ctx.fillStyle = isDark ? '#d0d0c8' : '#2F312B'
-          ctx.font = '80px serif'
-          ctx.textAlign = 'center'
-          ctx.fillText(this.data.hexagramSymbol, cx, y)
-          y += 70
+          ctx.strokeStyle = isDark ? '#d0d0c8' : '#2F312B'
+          ctx.lineWidth = 4
+          
+          for (let i = 0; i < 6; i++) {
+            const line = this.data.hexLines[i]
+            const lineY = y + i * 24
+            
+            if (line.type === 'yang') {
+              ctx.beginPath()
+              ctx.moveTo(cx - 48, lineY)
+              ctx.lineTo(cx + 48, lineY)
+              ctx.stroke()
+            } else {
+              ctx.beginPath()
+              ctx.moveTo(cx - 48, lineY)
+              ctx.lineTo(cx - 12, lineY)
+              ctx.stroke()
+              ctx.beginPath()
+              ctx.moveTo(cx + 12, lineY)
+              ctx.lineTo(cx + 48, lineY)
+              ctx.stroke()
+            }
+          }
+          y += 6 * 24 + 20
         }
 
         if (this.data.hexagramName) {
           ctx.fillStyle = isDark ? '#b0b0a8' : '#4A4A45'
-          ctx.font = '26px serif'
+          ctx.font = '30px serif'
           ctx.textAlign = 'center'
           ctx.fillText(this.data.hexagramName, cx, y)
-          y += 36
+          y += 40
         }
 
         if (this.data.hexagramText) {
           ctx.fillStyle = isDark ? '#8a8a80' : '#8A8A82'
-          ctx.font = '22px serif'
+          ctx.font = '26px serif'
           ctx.textAlign = 'center'
           const maxWidth = w * 0.65
           const text = this.data.hexagramText
           if (ctx.measureText(text).width > maxWidth) {
             const mid = Math.ceil(text.length / 2)
             ctx.fillText(text.substring(0, mid), cx, y)
-            ctx.fillText(text.substring(mid), cx, y + 30)
-            y += 60
+            ctx.fillText(text.substring(mid), cx, y + 34)
+            y += 68
           } else {
             ctx.fillText(text, cx, y)
-            y += 40
+            y += 44
           }
         }
 
@@ -174,10 +194,6 @@ Page({
         })
       })
     })
-  },
-
-  shareToFriend() {
-    wx.showToast({ title: '请点击右上角分享', icon: 'none' })
   },
 
   onShareAppMessage() {
