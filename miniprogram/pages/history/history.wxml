@@ -1,7 +1,14 @@
 <!-- pages/history/history.wxml -->
 <view class="history-page">
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <input class="search-input" placeholder="搜索记录..." value="{{searchQuery}}" bindinput="onSearchInput" />
+    <view class="search-clear" wx:if="{{searchQuery}}" bindtap="onSearchClear">✕</view>
+  </view>
+
+  <!-- 记录列表 -->
   <view class="history-list">
-    <view class="history-item" wx:for="{{historyList}}" wx:key="date" bindtap="viewDetail" data-date="{{item.date}}">
+    <view class="history-item" wx:for="{{filteredList}}" wx:key="date" bindtap="viewDetail" data-date="{{item.date}}">
       <view class="item-date">{{item.dateText}}</view>
       <view class="item-words">{{item.words}}</view>
       <view class="item-hexagram" wx:if="{{item.hexagramName}}">
@@ -15,8 +22,10 @@
     </view>
   </view>
 
-  <view class="empty-state" wx:if="{{historyList.length === 0}}">
-    <view class="empty-text">暂无记录</view>
-    <view class="empty-hint">每天用两个字记下一天</view>
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredList.length === 0}}">
+    <view class="empty-text" wx:if="{{searchQuery}}">未找到匹配记录</view>
+    <view class="empty-text" wx:else>暂无记录</view>
+    <view class="empty-hint" wx:if="{{!searchQuery}}">每天用两个字记下一天</view>
   </view>
 </view>

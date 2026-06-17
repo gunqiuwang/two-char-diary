@@ -4,6 +4,8 @@ const { HEX_DATA } = require('../../utils/hexdata')
 const { solarToLunar } = require('../../utils/lunar')
 const { getRandomWords } = require('../../utils/words')
 const { getTodayKey, loadBgStyle } = require('../../utils/common')
+const { getSpecialDate, getDailyWords } = require('../../utils/solarterm')
+const { getSpecialDate, getDailyWords } = require('../../utils/solarterm')
 
 Page({
   data: {
@@ -11,6 +13,7 @@ Page({
     lunarYear: '',
     lunarMonthDay: '',
     solarDate: '',
+    specialDate: '',
     chars: ['', ''],
     input1: '',
     input2: '',
@@ -28,6 +31,9 @@ Page({
     hexagramText: '',
     hexLines: [],
 
+    totalDays: 0,
+    streakDays: 0,
+
     bgStyle: 'xuan',
     bgClass: '',
     isDark: false
@@ -39,11 +45,13 @@ Page({
     this.initDate()
     this.initCandidates()
     this.loadBgStyle()
+    this.loadStats()
   },
 
   onShow() {
     this.loadToday()
     this.loadBgStyle()
+    this.loadStats()
   },
 
   loadBgStyle() {
@@ -62,7 +70,9 @@ Page({
     const lunarMonthDay = `${lunar.monthText}${lunar.dayText}`
     const solarDate = `${month}月${day}日`
 
-    this.setData({ lunarYear, lunarMonthDay, solarDate })
+    const specialDate = getSpecialDate(month, day, lunar.lunarMonth, lunar.lunarDay)
+
+    this.setData({ lunarYear, lunarMonthDay, solarDate, specialDate })
   },
 
   loadToday() {
@@ -108,9 +118,58 @@ Page({
     this.setData(update)
   },
 
+  loadStats() {
+    const data = wx.getStorageSync('diary_data') || {}
+    const keys = Object.keys(data).filter(k => data[k] && data[k].words)
+    
+    // 总记录天数
+    const totalDays = keys.length
+    
+    // 连续记录天数
+    let streakDays = 0
+    if (keys.length > 0) {
+      const sortedDates = keys.sort().reverse()
+      const today = getTodayKey()
+      let checkDate = new Date()
+      
+      // 如果今天没记录，从昨天开始算
+      if (!data[today] || !data[today].words) {
+        checkDate.setDate(checkDate.getDate() - 1)
+      }
+      
+      for (let i = 0; i < 365; i++) {
+        const dateStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`
+        if (data[dateStr] && data[dateStr].words) {
+          streakDays++
+          checkDate.setDate(checkDate.getDate() - 1)
+        } else {
+          break
+        }
+      }
+    }
+    
+    this.setData({ totalDays, streakDays })
+  },
+
   // 备选词功能
   initCandidates() {
-    const words = getRandomWords(8)
+    const now = new Date()
+    const month = now.getMonth() + 1
+    const day = now.getDate()
+    const lunar = solarToLunar(now.getFullYear(), month, day)
+    
+    // 优先使用节气/节日推荐词
+    const dailyWords = getDailyWords(month, day, lunar.lunarMonth, lunar.lunarDay)
+    
+    let words
+    if (dailyWords) {
+      // 节气推荐词 + 随机词
+      const randomWords = getRandomWords(4)
+      words = [...dailyWords, ...randomWords]
+    } else {
+      words = getRandomWords(8)
+    }
+    
     this.setData({ candidateWords: words })
   },
 

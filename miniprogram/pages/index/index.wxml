@@ -20,6 +20,16 @@
         <view class="date-dot"></view>
         <text class="date-day">{{lunarMonthDay}}</text>
       </view>
+      <view class="special-date" wx:if="{{specialDate}}">
+        <text class="special-text">{{specialDate}}</text>
+      </view>
+    </view>
+    
+    <!-- 统计信息 -->
+    <view class="stats-row anim-fade-in-d2" wx:if="{{totalDays > 0}}">
+      <text class="stats-text">已记录 {{totalDays }} 天</text>
+      <view class="stats-dot" wx:if="{{streakDays > 1}}"></view>
+      <text class="stats-text" wx:if="{{streakDays > 1}}">连续 {{streakDays}} 天</text>
     </view>
   </view>
 

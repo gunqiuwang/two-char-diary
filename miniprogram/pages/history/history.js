@@ -5,6 +5,8 @@ Page({
   data: {
     statusBarHeight: 20,
     historyList: [],
+    filteredList: [],
+    searchQuery: '',
     bgStyle: 'xuan',
     bgClass: '',
     isDark: false
@@ -47,7 +49,38 @@ Page({
       }
     })
 
-    this.setData({ historyList })
+    this.setData({ 
+      historyList,
+      filteredList: historyList
+    })
+  },
+
+  onSearchInput(e) {
+    const query = e.detail.value.toLowerCase()
+    this.setData({ searchQuery: query })
+    this.filterList(query)
+  },
+
+  onSearchClear() {
+    this.setData({ 
+      searchQuery: '',
+      filteredList: this.data.historyList
+    })
+  },
+
+  filterList(query) {
+    if (!query) {
+      this.setData({ filteredList: this.data.historyList })
+      return
+    }
+    
+    const filtered = this.data.historyList.filter(item => {
+      return (item.words && item.words.includes(query)) ||
+             (item.hexagramName && item.hexagramName.includes(query)) ||
+             (item.dateText && item.dateText.includes(query))
+    })
+    
+    this.setData({ filteredList: filtered })
   },
 
   viewDetail(e) {

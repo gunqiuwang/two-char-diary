@@ -108,6 +108,37 @@
   background: #B0A99A;
 }
 
+.special-date {
+  margin-top: 8rpx;
+}
+
+.special-text {
+  font-size: 20rpx;
+  color: #8A7E6B;
+  letter-spacing: 4rpx;
+  font-weight: 500;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 4rpx;
+}
+
+.stats-text {
+  font-size: 18rpx;
+  color: #A09888;
+  letter-spacing: 2rpx;
+}
+
+.stats-dot {
+  width: 3rpx;
+  height: 3rpx;
+  border-radius: 50%;
+  background: #B0A99A;
+}
+
 /* ===== 米字框 ===== */
 .words-section {
   position: relative;
@@ -572,6 +603,18 @@
 }
 
 .dark-page .date-dot {
+  background: #5a5a50;
+}
+
+.dark-page .special-text {
+  color: #8a8a7a;
+}
+
+.dark-page .stats-text {
+  color: #7a7a70;
+}
+
+.dark-page .stats-dot {
   background: #5a5a50;
 }
 

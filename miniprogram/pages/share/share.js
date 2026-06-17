@@ -28,6 +28,13 @@ Page({
     this.setData({ statusBarHeight: sysInfo.statusBarHeight || 20 })
     this.loadBgStyle()
 
+    // 启用分享到朋友圈
+    wx.showShareMenu({
+      menus: ['shareAppMessage', 'shareTimeline'],
+      success: () => {},
+      fail: () => {}
+    })
+
     const dateKey = options.date || getTodayKey()
     const diaryData = wx.getStorageSync('diary_data') || {}
     const stored = diaryData[dateKey] || {}
@@ -353,5 +360,9 @@ Page({
 
   onShareAppMessage() {
     return { title: `今日二字：${this.data.words}`, path: '/pages/index/index' }
+  },
+
+  onShareTimeline() {
+    return { title: `今日二字：${this.data.words}`, query: '', imageUrl: '' }
   }
 })
