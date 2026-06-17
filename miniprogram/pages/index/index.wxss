@@ -480,13 +480,13 @@
 }
 
 .nav-arrow {
-  font-size: 28rpx;
+  font-size: 32rpx;
   color: #5A5850;
   line-height: 1;
 }
 
 .nav-label {
-  font-size: 16rpx;
+  font-size: 20rpx;
   color: #5A5850;
   letter-spacing: 2rpx;
 }

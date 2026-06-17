@@ -87,10 +87,10 @@
       <text class="nav-icon">←</text>
       <text class="nav-label">返回</text>
     </view>
-    <view class="nav-item" bindtap="shareToFriend">
+    <button class="nav-item share-btn" open-type="share">
       <text class="nav-icon">↗</text>
-      <text class="nav-label">发送</text>
-    </view>
+      <text class="nav-label">分享</text>
+    </button>
   </view>
 
   <canvas type="2d" id="shareCanvas" class="hidden-canvas"></canvas>
