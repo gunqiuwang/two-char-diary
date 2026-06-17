@@ -134,6 +134,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -40rpx;
 }
 
 .mi-zi-area {
@@ -144,8 +145,8 @@
 
 .mi-zi-box {
   position: relative;
-  width: 200rpx;
-  height: 200rpx;
+  width: 240rpx;
+  height: 240rpx;
 }
 
 .mi-zi-box::before {
@@ -193,8 +194,8 @@
 .mi-input {
   position: absolute;
   top: 0; left: 0;
-  width: 200rpx;
-  height: 200rpx;
+  width: 240rpx;
+  height: 240rpx;
   opacity: 0.01;
   z-index: 3;
   font-size: 100rpx;
