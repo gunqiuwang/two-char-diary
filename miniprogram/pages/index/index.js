@@ -69,7 +69,14 @@ Page({
     const lunarMonthDay = `${lunar.monthText}${lunar.dayText}`
     const solarDate = `${month}月${day}日`
 
-    const specialDate = getSpecialDate(month, day, lunar.lunarMonth, lunar.lunarDay)
+    // 获取节气/节日
+    const specialDate = getSpecialDate(month, day, lunar.lunarMonth, lunar.lunarDay, lunar.lunarYear)
+    
+    // 获取每日推荐词
+    const dailyWords = getDailyWords(month, day, lunar.lunarMonth, lunar.lunarDay, lunar.lunarYear)
+    if (dailyWords) {
+      this.setData({ candidateWords: dailyWords })
+    }
 
     this.setData({ lunarYear, lunarMonthDay, solarDate, specialDate })
   },

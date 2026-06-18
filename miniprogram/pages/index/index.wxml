@@ -27,7 +27,7 @@
     
     <!-- 统计信息 -->
     <view class="stats-row anim-fade-in-d2" wx:if="{{totalDays > 0}}">
-      <text class="stats-text">已记录 {{totalDays }} 天</text>
+      <text class="stats-text">已记录 {{totalDays}} 天</text>
       <view class="stats-dot" wx:if="{{streakDays > 1}}"></view>
       <text class="stats-text" wx:if="{{streakDays > 1}}">连续 {{streakDays}} 天</text>
     </view>
@@ -111,7 +111,7 @@
     </view>
     <view class="nav-item" wx:if="{{castingState === 'result' && isRecorded}}" bindtap="goToShare">
       <text class="nav-icon nav-arrow">↗</text>
-      <text class="nav-label">分享</text>
+      <text class="nav-label">朋友圈</text>
     </view>
     <view class="nav-item" bindtap="openSettings">
       <view class="nav-icon icon-settings"></view>

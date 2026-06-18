@@ -1,5 +1,7 @@
 // 二十四节气 + 传统节日 + 每日推荐词
 
+const { lunarYearDays, leapMonth, monthDays } = require('./lunar')
+
 // 节气数据（基于太阳黄经，简化算法）
 // 节气日期在公历中基本固定，少数年份有1天偏差
 const SOLAR_TERMS = {
@@ -120,20 +122,39 @@ function getSolarFestival(month, day) {
   return SOLAR_FESTIVALS[`${month}-${day}`] || null
 }
 
+// 获取农历某年腊月的天数
+function getLunar12MonthDays(year) {
+  // 腊月是第12个月
+  const leap = leapMonth(year)
+  if (leap === 12) {
+    // 如果闰腊月，返回闰月天数
+    return (LUNAR_INFO[year - 1900] & 0x10000) ? 30 : 29
+  }
+  return monthDays(year, 12)
+}
+
 // 获取今日节日（农历）
-function getLunarFestival(lunarMonth, lunarDay) {
+function getLunarFestival(lunarMonth, lunarDay, lunarYear) {
+  // 处理除夕：腊月最后一天
+  if (lunarMonth === 12 && lunarDay === 29) {
+    // 如果腊月只有29天，这一天也是除夕
+    const daysInMonth = getLunar12MonthDays(lunarYear)
+    if (daysInMonth === 29) {
+      return '除夕'
+    }
+  }
   return LUNAR_FESTIVALS[`${lunarMonth}-${lunarDay}`] || null
 }
 
 // 获取每日推荐词
-function getDailyWords(month, day, lunarMonth, lunarDay) {
+function getDailyWords(month, day, lunarMonth, lunarDay, lunarYear) {
   // 优先使用节日推荐词
   const solarFestival = getSolarFestival(month, day)
   if (solarFestival && FESTIVAL_WORDS[solarFestival]) {
     return FESTIVAL_WORDS[solarFestival]
   }
   
-  const lunarFestival = getLunarFestival(lunarMonth, lunarDay)
+  const lunarFestival = getLunarFestival(lunarMonth, lunarDay, lunarYear)
   if (lunarFestival && FESTIVAL_WORDS[lunarFestival]) {
     return FESTIVAL_WORDS[lunarFestival]
   }
@@ -148,9 +169,9 @@ function getDailyWords(month, day, lunarMonth, lunarDay) {
 }
 
 // 获取今日特殊日期描述（节气/节日）
-function getSpecialDate(month, day, lunarMonth, lunarDay) {
+function getSpecialDate(month, day, lunarMonth, lunarDay, lunarYear) {
   const solarFestival = getSolarFestival(month, day)
-  const lunarFestival = getLunarFestival(lunarMonth, lunarDay)
+  const lunarFestival = getLunarFestival(lunarMonth, lunarDay, lunarYear)
   const solarTerm = getSolarTerm(month, day)
   
   // 优先级：农历节日 > 公历节日 > 节气

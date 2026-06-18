@@ -37,11 +37,6 @@
   padding-bottom: 80rpx;
 }
 
-/* 米字格固定位置 */
-.words-section {
-  margin-top: 0;
-}
-
 .paper-texture {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -694,10 +689,6 @@
 
 .dark-page .hex-yao {
   border-bottom-color: #444440;
-}
-
-.dark-page .share-mark {
-  color: #8a8a80;
 }
 
 .dark-page .float-nav {

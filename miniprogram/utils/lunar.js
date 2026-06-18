@@ -136,5 +136,8 @@ function solarToLunar(year, month, day) {
 }
 
 module.exports = {
-  solarToLunar
+  solarToLunar,
+  lunarYearDays,
+  leapMonth,
+  monthDays
 }
