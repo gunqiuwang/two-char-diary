@@ -1,37 +1,127 @@
 ---
 type: testing
 status: active
-confidence: medium
-last_updated: 2026-06-02
+confidence: high
+last_updated: 2026-07-10
 owner: agent
-reviewed_by: unreviewed
+reviewed_by: agent
 ---
 
 # Testing and Verification
 
-## No Automated Test Suite
+## Automated Checks
 
-项目无自动化测试。验证依赖手动 QA。
+```bash
+node test-project.js
+node test-lunar.js
+```
 
-## Manual QA Checklist
+Current result:
 
-- [ ] 首页加载，暖米白底色正确
-- [ ] 米字框输入一个字后自动跳转下一个
-- [ ] 铜钱点击后 6 轮动画正常执行
-- [ ] 动画完成后卦名+卦辞正确显示
-- [ ] 分享页二字正确传递
-- [ ] Canvas 海报生成完整（二字+卦象+卦名）
-- [ ] 保存图片到相册成功
-- [ ] 年历页 12 个月正确显示
-- [ ] 有记录日期显示铜色小点
-- [ ] 设置页提醒时间选择正常
-- [ ] 导出数据到剪贴板成功
-- [ ] 清除数据二次确认弹窗正常
+```text
+包体静态文件总大小：163.0 KB
+项目静态检查通过
+农历测试：6 passed / 0 failed / 2 info
+```
 
-## Critical User Flows
+`test-project.js` validates:
 
-| Flow | Steps | Expected |
-|------|-------|----------|
-| 记录今日 | 输入二字 → 铜钱 → 等待动画 → 看到卦象 | 二字+卦象保存成功 |
-| 分享 | 记录后 → 点击「记下这一日」→ 保存海报 | 海报完整，保存成功 |
-| 查看历史 | 年历页 → 点击有记录日期 → 看到分享卡片 | 数据正确显示 |
+- JavaScript syntax
+- JSON parsing
+- app route files
+- WXML event handlers
+- common mojibake patterns
+- 64 hexagrams
+- 6 yao texts per hexagram
+- candidate-word write and local persistence
+- static package size
+
+## Manual Critical Flows
+
+### Record today
+
+1. Open home.
+2. Enter or paste two characters.
+3. Modify one saved character.
+4. Blur an incomplete edit.
+5. Cast once.
+
+Expected:
+
+- Focus behavior is usable.
+- Incomplete edits restore saved content.
+- Saved stats refresh immediately.
+- Casting cannot be duplicated.
+- Result survives page navigation.
+
+### Calendar
+
+1. Open calendar.
+2. Select a recorded day.
+3. Change month/year.
+4. Return to the recorded month.
+5. Generate a historical share card.
+
+Expected:
+
+- Record dots are correct.
+- Old detail clears after changing month/year.
+- Selected record opens the correct share date.
+
+### Cross-device share
+
+Use two different WeChat accounts:
+
+1. Sender shares a record.
+2. Receiver already has a different local record on the same date.
+3. Receiver opens sender's share.
+
+Expected:
+
+- Sender content wins over receiver local storage.
+- No local data is overwritten.
+- External page back button returns home.
+
+### Local data and clear
+
+1. Confirm the overview shows record days, cast count and latest date.
+2. Tap clear data and cancel once.
+3. Confirm clear and reopen home and calendar.
+
+Expected:
+
+- The warning states that deletion cannot be recovered.
+- Cancel leaves all records intact.
+- Confirm clears home, calendar and the overview count.
+
+### Reduced motion
+
+1. Set motion to reduced.
+2. Reopen home, calendar, share and settings.
+
+Expected:
+
+- Decorative motion is reduced across all pages.
+- Functional state changes still complete normally.
+
+### Album permission
+
+Test on iOS and Android:
+
+- first permission grant
+- permission denial
+- open settings recovery
+- repeated save taps
+- all four poster styles
+
+## Device Matrix
+
+- iPhone small screen
+- iPhone notch / Dynamic Island
+- Android common devices
+- HarmonyOS WeChat
+- large font accessibility setting
+- light and dark themes
+- offline mode
+
+Full checklist: `docs/WECHAT_SUBMISSION_CHECKLIST.md`.

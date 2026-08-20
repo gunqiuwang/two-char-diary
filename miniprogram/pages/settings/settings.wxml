@@ -1,47 +1,79 @@
 <!-- pages/settings/settings.wxml -->
-<view class="settings-page {{bgStyle === 'dark' ? 'dark-mode' : ''}}" style="background-color: {{bgStyle === 'dark' ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+<view class="settings-page {{bgStyle === 'dark' ? 'dark-mode' : ''}} {{reduceMotion ? 'reduced-motion' : ''}}" style="background-color: {{bgStyle === 'dark' ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
   <view class="paper-texture {{bgClass}}"></view>
-
-  <!-- 状态栏 -->
   <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
 
-  <!-- 返回按钮 -->
   <view class="top-bar anim-fade-in">
-    <view class="back-btn" bindtap="goBack">
+    <view class="back-btn" bindtap="goBack" aria-label="返回首页">
       <view class="back-arrow"></view>
     </view>
+    <text class="settings-title">设置</text>
+    <view class="top-placeholder"></view>
   </view>
 
-  <!-- 背景风格 -->
-  <view class="setting-section">
-    <view class="setting-title">背景</view>
+  <view class="setting-section anim-fade-in-d1">
+    <view class="setting-title">外观</view>
     <view class="bg-grid">
       <view class="bg-card {{bgStyle === item.key ? 'active' : ''}}" wx:for="{{bgStyles}}" wx:key="key" bindtap="onBgStyleChange" data-key="{{item.key}}">
         <view class="bg-preview" style="background: {{item.bg}};"></view>
         <text class="bg-name">{{item.name}}</text>
       </view>
     </view>
-  </view>
 
-  <!-- 数据管理 -->
-  <view class="setting-section">
-    <view class="setting-title">数据</view>
-    <view class="setting-item" bindtap="clearData">
-      <view class="setting-label">清除所有数据</view>
-      <view class="setting-arrow">›</view>
+    <view class="setting-row-group motion-group">
+      <view class="setting-copy">
+        <text class="setting-label">动效</text>
+        <text class="setting-caption">减弱页面进入和循环动画</text>
+      </view>
+      <view class="segment-control">
+        <view class="segment-item {{motionMode === 'standard' ? 'active' : ''}}" bindtap="onMotionModeChange" data-mode="standard">标准</view>
+        <view class="segment-item {{motionMode === 'reduced' ? 'active' : ''}}" bindtap="onMotionModeChange" data-mode="reduced">减弱</view>
+      </view>
     </view>
   </view>
 
-  <!-- 更多 -->
-  <view class="setting-section">
+  <view class="setting-section anim-fade-in-d2">
+    <view class="setting-title">数据</view>
+
+    <view class="overview-card">
+      <view class="overview-main">
+        <view class="overview-stat">
+          <text class="overview-number">{{dataOverview.days}}</text>
+          <text class="overview-label">记录天数</text>
+        </view>
+        <view class="overview-divider"></view>
+        <view class="overview-stat">
+          <text class="overview-number">{{dataOverview.casts}}</text>
+          <text class="overview-label">起卦次数</text>
+        </view>
+      </view>
+      <view class="overview-meta-row">
+        <text>最近记录</text>
+        <text>{{dataOverview.latest}}</text>
+      </view>
+    </view>
+
+    <view class="setting-item danger-item" bindtap="clearData">
+      <view class="setting-copy">
+        <view class="setting-label">清除所有数据</view>
+        <view class="setting-caption">当前共有 {{dataOverview.days}} 天记录</view>
+      </view>
+      <view class="setting-arrow"></view>
+    </view>
+  </view>
+
+  <view class="setting-section anim-fade-in-d3">
     <view class="setting-title">更多</view>
     <button class="setting-item share-btn" open-type="share">
       <view class="setting-label">分享小程序</view>
-      <view class="setting-arrow">›</view>
+      <view class="setting-arrow"></view>
     </button>
     <view class="setting-item" bindtap="showAbout">
-      <view class="setting-label">关于我们</view>
-      <view class="setting-arrow">›</view>
+      <view class="setting-copy">
+        <view class="setting-label">关于二字爻记</view>
+        <view class="setting-caption">版本 1.0.0</view>
+      </view>
+      <view class="setting-arrow"></view>
     </view>
   </view>
 </view>

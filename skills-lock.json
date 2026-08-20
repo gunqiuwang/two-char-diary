@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "skills": {
+    "baoyu-diagram": {
+      "source": "jimliu/baoyu-skills",
+      "sourceType": "github",
+      "skillPath": "skills/baoyu-diagram/SKILL.md",
+      "computedHash": "6c588a89cd5aae21f8053aaed688517c1e00921db9219401abe058e879324b87"
+    },
+    "baoyu-image-gen": {
+      "source": "jimliu/baoyu-skills",
+      "sourceType": "github",
+      "skillPath": "skills/baoyu-image-gen/SKILL.md",
+      "computedHash": "4dc7aa8eda19fc07fc2d3f979f8e200685760e72805f06c6764fbc40b7d575c7"
+    },
+    "baoyu-infographic": {
+      "source": "jimliu/baoyu-skills",
+      "sourceType": "github",
+      "skillPath": "skills/baoyu-infographic/SKILL.md",
+      "computedHash": "ab2d4a5c16c7e1e52a5467590ad141549ba3fd3cda7c6b43ffd443f495ea421d"
+    },
+    "baoyu-markdown-to-html": {
+      "source": "jimliu/baoyu-skills",
+      "sourceType": "github",
+      "skillPath": "skills/baoyu-markdown-to-html/SKILL.md",
+      "computedHash": "7b7142342002790b1de1f8fad625d1164a2b575f18591484bd693cba2175dcc8"
+    },
+    "baoyu-url-to-markdown": {
+      "source": "jimliu/baoyu-skills",
+      "sourceType": "github",
+      "skillPath": "skills/baoyu-url-to-markdown/SKILL.md",
+      "computedHash": "b55b97dd2489018ab25588a7c4450eb24ea37bce501aebcb8cee9c294660d21c"
+    },
+    "docx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/docx/SKILL.md",
+      "computedHash": "6962db07127ee540a56e4677f65576d0727668a1d67f7da8bc978f10791c2bfe"
+    },
+    "fireworks-tech-graph": {
+      "source": "yizhiyanhua-ai/fireworks-tech-graph",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "48bb754668f0d221a21accd0f3149a70e152cd235f9fbbcd99a2bb2f6e9bb1e3"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
+    },
+    "gsap": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/gsap/SKILL.md",
+      "computedHash": "ef2658b3705d3fd5c8e38d197b31521553a0bee3b40bda2ab70bf22bd6b88854"
+    },
+    "gsap-core": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-core/SKILL.md",
+      "computedHash": "c4a01101d9e1aafbf4b49f75d74f9349790d8741981ba0237c990093863035a6"
+    },
+    "guizang-ppt-skill": {
+      "source": "op7418/guizang-ppt-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "b56f400b1d9daa263b67a9b915da350113ef166ea44436184d2f2371fed14b92"
+    },
+    "html-ppt": {
+      "source": "lewislulu/html-ppt-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "977bae0cdd515696cf400bb050b1c8741e8d911466fb1ec011138f4411396a03"
+    },
+    "huashu-design": {
+      "source": "alchaincyf/huashu-design",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "1f865a019153a133a69fc7ab251e94fd3d07b6a74e0adaa19e58c1006af9b9cd"
+    },
+    "huashu-md-html": {
+      "source": "alchaincyf/huashu-md-html",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "3b0827f1de400c46b570ccaee3597df91575eb728597c11ac4abf82391397d76"
+    },
+    "opencli-usage": {
+      "source": "jackwener/opencli",
+      "sourceType": "github",
+      "skillPath": "skills/opencli-usage/SKILL.md",
+      "computedHash": "9ac8c8a5841ee541affe2dffb0fb42788a760638d2d9bd9e87cb74f4e15de5d0"
+    },
+    "pptx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/pptx/SKILL.md",
+      "computedHash": "6b8b859d26f93aa059c9870d1ab76b44ab69e3d6757ce4a03cc94cb760888073"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
+    },
+    "slowmist-agent-security": {
+      "source": "slowmist/slowmist-agent-security",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "35ea74b6b07fcb70f4520dd35ac28e2ce059279eefeec3f71944245098ba564a"
+    },
+    "web-access": {
+      "source": "eze-is/web-access",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "8b045544b9e5d94d0a3d4678330f157c874bc4149737faaeff052b5390ac4e4a"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "computedHash": "ad5b1fc52807e9afa4635e59218a026b164dc58b6c3f41b0f7c644dcd6ccf572"
+    },
+    "xlsx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/xlsx/SKILL.md",
+      "computedHash": "efd0c8011cf0677d8075cf93867ecec804f9a8754a777e1d2fdb46197e9c247f"
+    }
+  }
+}

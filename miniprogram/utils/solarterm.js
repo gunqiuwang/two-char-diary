@@ -1,6 +1,6 @@
 // 二十四节气 + 传统节日 + 每日推荐词
 
-const { lunarYearDays, leapMonth, monthDays } = require('./lunar')
+const { monthDays } = require('./lunar')
 
 // 节气数据（基于太阳黄经，简化算法）
 // 节气日期在公历中基本固定，少数年份有1天偏差
@@ -124,12 +124,7 @@ function getSolarFestival(month, day) {
 
 // 获取农历某年腊月的天数
 function getLunar12MonthDays(year) {
-  // 腊月是第12个月
-  const leap = leapMonth(year)
-  if (leap === 12) {
-    // 如果闰腊月，返回闰月天数
-    return (LUNAR_INFO[year - 1900] & 0x10000) ? 30 : 29
-  }
+  if (!year) return 30
   return monthDays(year, 12)
 }
 

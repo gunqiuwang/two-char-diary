@@ -8,11 +8,21 @@ const BG_MAP = { xuan: '', silk: 'paper-texture-silk', bamboo: 'paper-texture-ba
 function loadBgStyle() {
   const settings = wx.getStorageSync('settings') || {}
   const bgStyle = settings.bgStyle || 'xuan'
+  const motionMode = settings.motionMode === 'reduced' ? 'reduced' : 'standard'
   return {
     bgStyle,
     bgClass: BG_MAP[bgStyle] || '',
-    isDark: bgStyle === 'dark'
+    isDark: bgStyle === 'dark',
+    motionMode,
+    reduceMotion: motionMode === 'reduced'
   }
 }
 
-module.exports = { getTodayKey, loadBgStyle, BG_MAP }
+function getWindowInfoSafe() {
+  if (typeof wx.getWindowInfo === 'function') {
+    return wx.getWindowInfo()
+  }
+  return { statusBarHeight: 20, pixelRatio: 1 }
+}
+
+module.exports = { getTodayKey, loadBgStyle, BG_MAP, getWindowInfoSafe }

@@ -1,5 +1,5 @@
 <!-- pages/share/share.wxml -->
-<view class="share-page {{isDark ? 'dark-page' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+<view class="share-page {{isDark ? 'dark-page' : ''}} {{reduceMotion ? 'reduced-motion' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
   <view class="paper-texture {{bgClass}}"></view>
 
   <!-- 状态栏 -->
@@ -7,14 +7,14 @@
 
   <!-- 返回按钮 -->
   <view class="top-bar anim-fade-in">
-    <view class="back-btn" bindtap="goBack">
+    <view class="back-btn" bindtap="goBack" aria-label="返回首页">
       <view class="back-arrow"></view>
     </view>
   </view>
 
-  <!-- 卡片 -->
+  <!-- 分享卡片 -->
   <view class="share-card {{isDark ? 'card-dark' : ''}}" id="shareCard" wx:if="{{words}}" style="background: {{isDark ? '#333330' : bgStyle === 'silk' ? '#faf6ee' : bgStyle === 'bamboo' ? '#e8efe2' : '#faf9f5'}}; border-color: {{isDark ? '#444440' : bgStyle === 'silk' ? '#e0d6c4' : bgStyle === 'bamboo' ? '#c8d4c0' : '#D8D4CB'}};">
-    <!-- 标题 + 印章 -->
+    <!-- 标题和印章 -->
     <view class="card-title anim-fade-in">
       <text class="title-text">二字爻记</text>
       <view class="seal">爻</view>
@@ -38,57 +38,54 @@
         <view class="grid-v"></view>
         <view class="grid-d1"></view>
         <view class="grid-d2"></view>
-        <text class="mi-char">{{words[0] || ''}}</text>
+        <text class="mi-char">{{wordChars[0] || ''}}</text>
       </view>
       <view class="mi-zi-box">
         <view class="grid-h"></view>
         <view class="grid-v"></view>
         <view class="grid-d1"></view>
         <view class="grid-d2"></view>
-        <text class="mi-char">{{words[1] || ''}}</text>
+        <text class="mi-char">{{wordChars[1] || ''}}</text>
       </view>
     </view>
 
     <!-- 卦象 -->
     <view class="card-hex-section" wx:if="{{hexLines.length}}">
       <view class="card-hex-lines">
-        <view class="card-hex-line {{item.type === 'yang' ? 'yang' : 'yin'}}" wx:for="{{hexLines}}" wx:key="index"></view>
+        <view class="card-hex-line {{item.type === 'yang' ? 'yang' : 'yin'}}" wx:for="{{hexLines}}" wx:key="key"></view>
       </view>
       <view class="card-hex-name anim-fade-in-d2">{{hexagramName}}</view>
       <view class="card-hex-ci anim-fade-in-d2">{{hexagramText}}</view>
       <view class="card-hex-yaos" wx:if="{{displayYaos.length}}">
-        <view class="card-hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{index * 60}}ms;">
+        <view class="card-hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="*this" style="animation-delay: {{index * 60}}ms;">
           <text class="card-yao-text">{{item}}</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 无数据 -->
+  <!-- 无数据状态 -->
   <view class="card-empty anim-fade-in-d1" wx:if="{{!words}}">
     <text class="card-empty-text">暂无记录</text>
   </view>
 
-  <!-- 风格选择 -->
-  <view class="style-grid anim-fade-in-d2">
-    <view class="style-card {{bgStyle === item.key ? 'active' : ''}}" wx:for="{{bgStyles}}" wx:key="key" bindtap="onBgStyleChange" data-key="{{item.key}}">
-      <view class="style-preview" style="background: {{item.bg}};"></view>
-      <text class="style-name">{{item.name}}</text>
-    </view>
-  </view>
-
-  <!-- 底部操作按钮 -->
+  <!-- 底部操作 -->
   <view class="float-nav anim-fade-in-d3">
-    <view class="nav-item" bindtap="saveImage">
-      <text class="nav-icon">↓</text>
-      <text class="nav-label">保存</text>
+    <view class="nav-item {{isSaving ? 'disabled' : ''}}" bindtap="saveImage" aria-label="保存分享图片">
+      <view class="nav-icon icon-save">
+        <view class="save-drop"></view>
+        <view class="save-tray"></view>
+      </view>
+      <text class="nav-label">{{isSaving ? '生成中' : '保存'}}</text>
     </view>
-    <view class="nav-item" bindtap="goBack">
-      <text class="nav-icon">←</text>
-      <text class="nav-label">返回</text>
-    </view>
-    <button class="nav-item share-btn" open-type="share">
-      <text class="nav-icon">↗</text>
+    <button class="nav-item share-btn" open-type="share" disabled="{{!words}}" aria-label="分享当前记录">
+      <view class="nav-icon icon-share">
+        <view class="share-line share-line-top"></view>
+        <view class="share-line share-line-bottom"></view>
+        <view class="share-dot share-dot-left"></view>
+        <view class="share-dot share-dot-top"></view>
+        <view class="share-dot share-dot-bottom"></view>
+      </view>
       <text class="nav-label">分享</text>
     </button>
   </view>

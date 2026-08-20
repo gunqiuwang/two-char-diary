@@ -1,6 +1,6 @@
 <!-- pages/index/index.wxml -->
 <!-- 二字爻记 -->
-<view class="page {{isDark ? 'dark-page' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
+<view class="page {{isDark ? 'dark-page' : ''}} {{reduceMotion ? 'reduced-motion' : ''}}" style="background: {{isDark ? '#2a2a28' : bgStyle === 'silk' ? '#f0e6d2' : bgStyle === 'bamboo' ? '#dde6d6' : '#f5f4ed'}};">
   <view class="paper-texture {{bgClass}}"></view>
 
   <!-- 状态栏占位 -->
@@ -19,9 +19,8 @@
         <text class="date-year">{{lunarYear}}</text>
         <view class="date-dot"></view>
         <text class="date-day">{{lunarMonthDay}}</text>
-      </view>
-      <view class="special-date" wx:if="{{specialDate}}">
-        <text class="special-text">{{specialDate}}</text>
+        <view class="date-dot" wx:if="{{specialDate}}"></view>
+        <text class="date-special" wx:if="{{specialDate}}">{{specialDate}}</text>
       </view>
     </view>
     
@@ -38,21 +37,21 @@
     <!-- 米字框：视觉主体 -->
     <view class="words-section">
       <view class="mi-zi-area">
-        <view class="mi-zi-box anim-scale-in {{focus1 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="0" bindtap="onBoxTap" style="animation-delay: 200ms;">
+        <view class="mi-zi-box anim-scale-in {{focus1 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="0" bindtap="onBoxTap" aria-label="第一个字" style="animation-delay: 200ms;">
           <view class="grid-h"></view>
           <view class="grid-v"></view>
           <view class="grid-d1"></view>
           <view class="grid-d2"></view>
-          <text class="mi-char {{chars[0] && !focus1 ? 'char-pop' : ''}}" wx:if="{{!focus1 || !chars[0]}}">{{chars[0] || ''}}</text>
-          <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input1}}" bindinput="onInput1" bindblur="onBlur1" bindfocus="onFocus1" />
+          <text class="mi-char {{char1 && !focus1 ? 'char-pop' : ''}}">{{char1}}</text>
+          <input class="mi-input {{isRecorded ? 'input-locked' : ''}}" type="text" maxlength="2" value="{{input1}}" focus="{{focus1}}" aria-label="输入第一个字" bindinput="onInput1" bindblur="onBlur1" bindfocus="onFocus1" />
         </view>
-        <view class="mi-zi-box anim-scale-in {{focus2 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="1" bindtap="onBoxTap" style="animation-delay: 320ms;">
+        <view class="mi-zi-box anim-scale-in {{focus2 ? 'active' : ''}} {{isRecorded ? 'filled' : ''}}" data-idx="1" bindtap="onBoxTap" aria-label="第二个字" style="animation-delay: 320ms;">
           <view class="grid-h"></view>
           <view class="grid-v"></view>
           <view class="grid-d1"></view>
           <view class="grid-d2"></view>
-          <text class="mi-char {{chars[1] && !focus2 ? 'char-pop' : ''}}" wx:if="{{!focus2 || !chars[1]}}">{{chars[1] || ''}}</text>
-          <input class="mi-input" wx:if="{{!isRecorded}}" type="text" maxlength="1" value="{{input2}}" bindinput="onInput2" bindblur="onBlur2" bindfocus="onFocus2" />
+          <text class="mi-char {{char2 && !focus2 ? 'char-pop' : ''}}">{{char2}}</text>
+          <input class="mi-input {{isRecorded ? 'input-locked' : ''}}" type="text" maxlength="2" value="{{input2}}" focus="{{focus2}}" aria-label="输入第二个字" bindinput="onInput2" bindblur="onBlur2" bindfocus="onFocus2" />
         </view>
       </view>
 
@@ -74,26 +73,26 @@
     <view class="oracle-area">
       <!-- 铜钱 -->
       <view class="coin-wrap" wx:if="{{castingState !== 'result'}}">
-        <view class="coin-icon" bindtap="startCasting">
-          <view class="coin-inner-group">
+        <view class="coin-icon {{castingState === 'casting' ? 'is-casting' : ''}}" bindtap="startCasting" aria-label="起一卦">
+          <view class="coin-inner-group {{castingState === 'casting' ? 'casting' : ''}}">
             <view class="coin-outer"></view>
             <view class="coin-inner"></view>
           </view>
         </view>
-        <text class="coin-label">起课</text>
+        <text class="coin-label">{{castingState === 'casting' ? '成卦中' : '起课'}}</text>
       </view>
 
       <!-- 卦象 -->
       <view class="hexagram-section" wx:if="{{castingState === 'result'}}">
         <view class="hex-lines">
-          <view class="hex-line {{item.type === 'yang' ? 'yang' : 'yin'}} anim-line-in" wx:for="{{hexLines}}" wx:key="index" style="animation-delay: {{index * 80}}ms;"></view>
+          <view class="hex-line {{item.type === 'yang' ? 'yang' : 'yin'}} anim-line-in" wx:for="{{hexLines}}" wx:key="key" style="animation-delay: {{index * 80}}ms;"></view>
         </view>
         <view class="hex-name anim-fade-in-d1">{{hexagramName}}</view>
         <view class="hex-meta anim-fade-in-d2">
           <text class="hex-ci">{{hexagramText}}</text>
         </view>
         <view class="hex-yaos">
-          <view class="hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="index" style="animation-delay: {{480 + index * 60}}ms;">
+          <view class="hex-yao anim-slide-in" wx:for="{{displayYaos}}" wx:key="*this" style="animation-delay: {{480 + index * 60}}ms;">
             <text class="yao-text">{{item}}</text>
           </view>
         </view>
@@ -103,18 +102,28 @@
 
   <!-- 底部导航 -->
   <view class="float-nav anim-fade-in-d3">
-    <view class="nav-item" bindtap="goToCalendar">
+    <view class="nav-item" bindtap="goToCalendar" aria-label="查看记录">
       <view class="nav-icon icon-calendar">
         <view class="book-spine"></view>
       </view>
       <text class="nav-label">记录</text>
     </view>
-    <view class="nav-item" wx:if="{{castingState === 'result' && isRecorded}}" bindtap="goToShare">
-      <text class="nav-icon nav-arrow">↗</text>
-      <text class="nav-label">朋友圈</text>
+    <view class="nav-item" wx:if="{{castingState === 'result' && isRecorded}}" bindtap="goToShare" aria-label="生成分享卡">
+      <view class="nav-icon icon-share">
+        <view class="share-line share-line-top"></view>
+        <view class="share-line share-line-bottom"></view>
+        <view class="share-dot share-dot-left"></view>
+        <view class="share-dot share-dot-top"></view>
+        <view class="share-dot share-dot-bottom"></view>
+      </view>
+      <text class="nav-label">分享</text>
     </view>
-    <view class="nav-item" bindtap="openSettings">
-      <view class="nav-icon icon-settings"></view>
+    <view class="nav-item" bindtap="openSettings" aria-label="打开设置">
+      <view class="nav-icon icon-settings">
+        <view class="slider-row slider-row-1"><view class="slider-knob"></view></view>
+        <view class="slider-row slider-row-2"><view class="slider-knob"></view></view>
+        <view class="slider-row slider-row-3"><view class="slider-knob"></view></view>
+      </view>
       <text class="nav-label">设置</text>
     </view>
   </view>

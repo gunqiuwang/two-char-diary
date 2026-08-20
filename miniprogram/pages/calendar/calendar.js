@@ -1,29 +1,33 @@
 // pages/calendar/calendar.js
 const { solarToLunar } = require('../../utils/lunar')
-const { getTodayKey, loadBgStyle, BG_MAP } = require('../../utils/common')
+const { loadBgStyle, getWindowInfoSafe } = require('../../utils/common')
 
-const MONTH_NAMES = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月']
 const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
 
 Page({
   data: {
     statusBarHeight: 20,
+    isShortScreen: false,
     year: 2026,
     month: 1,
     days: [],
     weekdays: WEEKDAYS,
     selectedDate: '',
+    selectedDateLabel: '',
     selectedData: null,
     selectedLunar: '',
+    selectedWord1: '',
+    selectedWord2: '',
+    selectedHexLines: [],
+    detailYaos: [],
     recordDates: {},
     bgStyle: 'xuan',
     bgClass: '',
-    isDark: false,
-    monthActiveStyle: ''
+    isDark: false
   },
 
   onLoad() {
-    const sysInfo = wx.getWindowInfo()
+    const sysInfo = getWindowInfoSafe()
     const now = new Date()
     const year = now.getFullYear()
     const month = now.getMonth() + 1
@@ -32,36 +36,34 @@ Page({
 
     this.setData({
       statusBarHeight: sysInfo.statusBarHeight || 20,
+      isShortScreen: Number(sysInfo.windowHeight || 0) > 0 && Number(sysInfo.windowHeight) < 720,
       year,
       month,
       selectedDate: todayStr
     })
 
-    this.loadRecords()
-    this.buildMonth()
-    this.loadDetail(todayStr)
+    this.loadRecords(() => {
+      this.buildMonth()
+      this.loadDetail(todayStr)
+    })
     this.loadBgStyle()
   },
 
   onShow() {
-    this.loadRecords()
-    this.buildMonth()
-    if (this.data.selectedDate) {
-      this.loadDetail(this.data.selectedDate)
-    }
+    this.loadRecords(() => {
+      this.buildMonth()
+      if (this.data.selectedDate) {
+        this.loadDetail(this.data.selectedDate)
+      }
+    })
     this.loadBgStyle()
   },
 
   loadBgStyle() {
-    const bg = loadBgStyle()
-    const activeColorMap = { xuan: '#3A3A35', silk: '#a09070', bamboo: '#8a9a80', dark: '#7a7a70' }
-    const color = activeColorMap[bg.bgStyle] || '#3A3A35'
-    const textColor = bg.isDark ? '#2a2a28' : '#f5f4ed'
-    const monthActiveStyle = `background:${color};border-color:${color};color:${textColor}`
-    this.setData({ ...bg, monthActiveStyle })
+    this.setData(loadBgStyle())
   },
 
-  loadRecords() {
+  loadRecords(callback) {
     const diaryData = wx.getStorageSync('diary_data') || {}
     const recordDates = {}
     for (const key in diaryData) {
@@ -69,7 +71,9 @@ Page({
         recordDates[key] = true
       }
     }
-    this.setData({ recordDates })
+    this.setData({ recordDates }, () => {
+      if (typeof callback === 'function') callback()
+    })
   },
 
   buildMonth() {
@@ -85,12 +89,13 @@ Page({
     const days = []
 
     for (let i = 0; i < startWeekday; i++) {
-      days.push({ isEmpty: true })
+      days.push({ key: `empty-${i}`, isEmpty: true })
     }
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`
       days.push({
+        key: dateStr,
         day: d,
         date: dateStr,
         hasRecord: !!recordDates[dateStr],
@@ -98,6 +103,11 @@ Page({
         isSelected: dateStr === this.data.selectedDate,
         isEmpty: false
       })
+    }
+
+    // 固定为六周网格，让月份切换时页面高度和视觉节奏保持稳定。
+    while (days.length < 42) {
+      days.push({ key: `tail-empty-${days.length}`, isEmpty: true })
     }
 
     this.setData({ days })
@@ -112,35 +122,65 @@ Page({
       const lunar = solarToLunar(parseInt(y), parseInt(m), parseInt(day))
       const lunarText = `${lunar.monthText}${lunar.dayText}`
 
+      const yaoTexts = d.yaoTexts || []
+      const wordChars = Array.from(d.words || '').slice(0, 2)
+      const selectedHexLines = Array.isArray(d.yaos)
+        ? d.yaos.slice().reverse().map((yao, index) => ({ key: index, type: yao.type }))
+        : []
       this.setData({
+        selectedDateLabel: `${parseInt(m)}月${parseInt(day)}日`,
         selectedData: {
           words: d.words,
           hexagramSymbol: d.hexagramSymbol || '',
           hexagramName: d.hexagramName || '',
           hexagramText: d.hexagramText || '',
-          yaoTexts: d.yaoTexts || []
+          yaoTexts
         },
-        selectedLunar: lunarText
+        selectedLunar: lunarText,
+        selectedWord1: wordChars[0] || '',
+        selectedWord2: wordChars[1] || '',
+        selectedHexLines,
+        detailYaos: this.buildYaoItems(yaoTexts)
       })
     } else {
-      this.setData({ selectedData: null, selectedLunar: '' })
+      this.setData({
+        selectedDateLabel: '',
+        selectedData: null,
+        selectedLunar: '',
+        selectedWord1: '',
+        selectedWord2: '',
+        selectedHexLines: [],
+        detailYaos: []
+      })
     }
   },
 
+  changeCalendar(patch) {
+    this.setData({
+      ...patch,
+      selectedDate: '',
+      selectedDateLabel: '',
+      selectedData: null,
+      selectedLunar: '',
+      selectedWord1: '',
+      selectedWord2: '',
+      selectedHexLines: [],
+      detailYaos: []
+    }, () => this.buildMonth())
+  },
+
   prevYear() {
-    this.setData({ year: this.data.year - 1 })
-    this.buildMonth()
+    this.changeCalendar({ year: this.data.year - 1 })
   },
 
   nextYear() {
-    this.setData({ year: this.data.year + 1 })
-    this.buildMonth()
+    this.changeCalendar({ year: this.data.year + 1 })
   },
 
   selectMonth(e) {
-    const m = parseInt(e.currentTarget.dataset.month)
-    this.setData({ month: m })
-    this.buildMonth()
+    const month = Number(e.currentTarget.dataset.month)
+    if (!Number.isInteger(month) || month < 1 || month > 12 || month === this.data.month) return
+    this.changeCalendar({ month })
   },
 
   onDayTap(e) {
@@ -158,7 +198,33 @@ Page({
     this.loadDetail(date)
   },
 
+  buildYaoItems(yaoTexts) {
+    return (yaoTexts || []).map((value, index) => {
+      const text = String(value || '').trim()
+      const matched = text.match(/^([^：:]{1,6})[：:]\s*(.*)$/)
+      const fallbackLabels = ['上爻', '五爻', '四爻', '三爻', '二爻', '初爻']
+      return {
+        key: index,
+        label: matched ? matched[1] : fallbackLabels[index],
+        content: matched ? matched[2] : text
+      }
+    })
+  },
+
   goBack() {
-    wx.navigateBack()
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      wx.navigateBack()
+    } else {
+      wx.reLaunch({ url: '/pages/index/index' })
+    }
+  },
+
+  goToShare() {
+    if (!this.data.selectedDate || !this.data.selectedData) {
+      wx.showToast({ title: '请先选择一条记录', icon: 'none' })
+      return
+    }
+    wx.navigateTo({ url: `/pages/share/share?date=${this.data.selectedDate}` })
   }
 })

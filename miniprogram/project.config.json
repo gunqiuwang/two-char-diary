@@ -47,8 +47,8 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.19.4",
-  "appid": "wx9dabefed87b3e133",
+  "libVersion": "3.15.0",
+  "appid": "wxbc27f4ab5606530f",
   "projectname": "two-char-diary",
   "condition": {},
   "simulatorPluginLibVersion": {},

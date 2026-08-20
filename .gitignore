@@ -14,3 +14,4 @@ Thumbs.db
 
 # WeChat Mini Program
 miniprogram_npm/
+miniprogram/project.private.config.json

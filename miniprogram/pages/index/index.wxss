@@ -9,7 +9,7 @@
   flex-direction: column;
   align-items: center;
   padding: 0 60rpx;
-  font-family: "LXGW WenKai GB", "LXGW WenKai", "WeChatSansSS", "霞鹜文楷 GB", "霞鹜文楷", "Songti SC", "STSong", "PingFang SC", serif;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
@@ -34,7 +34,7 @@
   justify-content: center;
   gap: 48rpx;
   width: 100%;
-  padding-bottom: 80rpx;
+  padding-bottom: 140rpx;
 }
 
 .paper-texture {
@@ -77,7 +77,7 @@
   color: rgba(180, 40, 30, 0.5);
   font-weight: 400;
   transform: rotate(-12deg);
-  font-family: "LXGW WenKai GB", "LXGW WenKai", "WeChatSansSS", "Songti SC", serif;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   box-shadow:
     inset 0 0 4rpx rgba(180, 40, 30, 0.15),
     0 0 1rpx rgba(180, 40, 30, 0.1);
@@ -87,13 +87,16 @@
 .date-row {
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  justify-content: center;
+  gap: 10rpx;
+  white-space: nowrap;
 }
 
-.date-solar, .date-year, .date-day {
-  font-size: 22rpx;
+.date-solar, .date-year, .date-day, .date-special {
+  font-size: 21rpx;
   color: #A09888;
-  letter-spacing: 3rpx;
+  letter-spacing: 2rpx;
+  line-height: 1;
 }
 
 .date-dot {
@@ -101,17 +104,6 @@
   height: 3rpx;
   border-radius: 50%;
   background: #B0A99A;
-}
-
-.special-date {
-  margin-top: 8rpx;
-}
-
-.special-text {
-  font-size: 20rpx;
-  color: #8A7E6B;
-  letter-spacing: 4rpx;
-  font-weight: 500;
 }
 
 .stats-row {
@@ -213,6 +205,10 @@
   caret-color: transparent;
 }
 
+.mi-input.input-locked {
+  pointer-events: none;
+}
+
 .grid-h {
   position: absolute;
   top: 50%; left: 0; right: 0;
@@ -290,7 +286,11 @@
 }
 
 .candidate-item {
+  min-height: 64rpx;
   padding: 10rpx 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: 1rpx solid #C8C3B8;
   border-radius: 4rpx;
@@ -329,29 +329,44 @@
 }
 
 .coin-label {
-  font-size: 18rpx;
+  font-size: 22rpx;
   color: #A09888;
   letter-spacing: 4rpx;
 }
 
 .coin-icon {
-  width: 56rpx;
-  height: 56rpx;
+  width: 88rpx;
+  height: 88rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 24rpx;
+  margin-top: 8rpx;
   position: relative;
 }
 
 .coin-inner-group {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 56rpx;
+  height: 56rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: coinPulse 4s ease-in-out infinite;
+}
+
+.coin-icon.is-casting {
+  pointer-events: none;
+}
+
+.coin-inner-group.casting {
+  animation: coinCasting 1.2s ease-in-out infinite;
+}
+
+@keyframes coinCasting {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.8; }
+  30% { transform: translateY(-18rpx) rotate(160deg) scale(1.08); opacity: 1; }
+  65% { transform: translateY(6rpx) rotate(300deg) scale(0.96); opacity: 0.9; }
+  100% { transform: translateY(0) rotate(360deg) scale(1); opacity: 0.85; }
 }
 
 @keyframes coinPulse {
@@ -495,7 +510,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0 80rpx;
-  opacity: 0.35;
+  opacity: 0.6;
   transition: opacity 0.3s ease;
 }
 
@@ -504,22 +519,83 @@
 }
 
 .nav-item {
+  min-width: 88rpx;
+  min-height: 88rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8rpx;
+  transition: transform 180ms ease, opacity 180ms ease;
 }
 
-.nav-arrow {
-  font-size: 32rpx;
-  color: #5A5850;
-  line-height: 1;
+.nav-item:active {
+  transform: translateY(2rpx);
+  opacity: 0.75;
 }
 
 .nav-label {
-  font-size: 20rpx;
+  font-size: 22rpx;
   color: #5A5850;
   letter-spacing: 2rpx;
+}
+
+.nav-icon {
+  position: relative;
+  width: 36rpx;
+  height: 32rpx;
+  color: #5A5850;
+}
+
+/* 分享图标：斜向外发 */
+.icon-share {
+  width: 42rpx;
+  height: 34rpx;
+}
+
+.share-dot {
+  position: absolute;
+  width: 8rpx;
+  height: 8rpx;
+  border: 2rpx solid #5A5850;
+  border-radius: 50%;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.share-dot-left {
+  left: 3rpx;
+  top: 13rpx;
+}
+
+.share-dot-top {
+  right: 3rpx;
+  top: 2rpx;
+}
+
+.share-dot-bottom {
+  right: 3rpx;
+  bottom: 2rpx;
+}
+
+.share-line {
+  position: absolute;
+  left: 11rpx;
+  width: 24rpx;
+  height: 2rpx;
+  background: #5A5850;
+  border-radius: 2rpx;
+  transform-origin: left center;
+}
+
+.share-line-top {
+  top: 15rpx;
+  transform: rotate(-24deg);
+}
+
+.share-line-bottom {
+  top: 19rpx;
+  transform: rotate(24deg);
 }
 
 /* 日历图标 — 展开的书 */
@@ -586,6 +662,101 @@
   box-shadow: 0 10rpx 0 0 #5A5850, 0 20rpx 0 0 #5A5850;
 }
 
+/* iOS-like minimal tab icons */
+.nav-icon {
+  width: 44rpx;
+  height: 36rpx;
+  color: #6d6a62;
+}
+
+.icon-calendar {
+  width: 36rpx;
+  height: 32rpx;
+}
+
+.icon-calendar .book-spine {
+  left: 10rpx;
+  right: 10rpx;
+  top: 12rpx;
+  bottom: auto;
+  width: auto;
+  height: 1.5rpx;
+  background: #6d6a62;
+  transform: none;
+}
+
+.icon-calendar::before {
+  left: 4rpx;
+  top: 5rpx;
+  width: 28rpx;
+  height: 24rpx;
+  border: 1.5rpx solid #6d6a62;
+  border-radius: 5rpx;
+  transform: none;
+}
+
+.icon-calendar::after {
+  left: 10rpx;
+  top: 18rpx;
+  width: 16rpx;
+  height: 1.5rpx;
+  border: none;
+  border-radius: 1rpx;
+  background: #6d6a62;
+  transform: none;
+}
+
+.share-dot {
+  width: 7rpx;
+  height: 7rpx;
+  border: 1.5rpx solid #6d6a62;
+}
+
+.share-dot-left {
+  left: 6rpx;
+  top: 14rpx;
+}
+
+.share-dot-top {
+  right: 7rpx;
+  top: 5rpx;
+}
+
+.share-dot-bottom {
+  right: 7rpx;
+  bottom: 5rpx;
+}
+
+.share-line {
+  left: 13rpx;
+  width: 22rpx;
+  height: 1.5rpx;
+  background: #6d6a62;
+}
+
+.share-line-top {
+  top: 16rpx;
+  transform: rotate(-25deg);
+}
+
+.share-line-bottom {
+  top: 19rpx;
+  transform: rotate(25deg);
+}
+
+.icon-settings {
+  width: 34rpx;
+  height: 30rpx;
+}
+
+.icon-settings::before {
+  width: 28rpx;
+  height: 1.5rpx;
+  background: #6d6a62;
+  border-radius: 2rpx;
+  box-shadow: 0 9rpx 0 0 #6d6a62, 0 18rpx 0 0 #6d6a62;
+}
+
 /* ===== 暗色模式 ===== */
 .dark-page .title-text {
   color: #d0d0c8;
@@ -593,16 +764,13 @@
 
 .dark-page .date-solar,
 .dark-page .date-year,
-.dark-page .date-day {
+.dark-page .date-day,
+.dark-page .date-special {
   color: #7a7a70;
 }
 
 .dark-page .date-dot {
   background: #5a5a50;
-}
-
-.dark-page .special-text {
-  color: #8a8a7a;
 }
 
 .dark-page .stats-text {
@@ -692,11 +860,10 @@
 }
 
 .dark-page .float-nav {
-  opacity: 0.5;
+  opacity: 0.68;
 }
 
-.dark-page .nav-label,
-.dark-page .nav-arrow {
+.dark-page .nav-label {
   color: #8a8a80;
 }
 
@@ -714,8 +881,278 @@
   box-shadow: 0 10rpx 0 0 #8a8a80, 0 20rpx 0 0 #8a8a80;
 }
 
+.dark-page .share-dot {
+  border-color: #8a8a80;
+}
+
+.dark-page .share-line {
+  background: #8a8a80;
+}
+
 .dark-page .seal {
   border-color: rgba(200, 80, 60, 0.4);
   color: rgba(200, 80, 60, 0.45);
   box-shadow: inset 0 0 4rpx rgba(200, 80, 60, 0.12), 0 0 1rpx rgba(200, 80, 60, 0.08);
 }
+
+/* ===== 纸笺印记图标系统 ===== */
+.float-nav {
+  opacity: 0.82;
+  padding: 0 72rpx;
+}
+
+.nav-item {
+  position: relative;
+  min-width: 104rpx;
+  min-height: 96rpx;
+  border-radius: 28rpx;
+  gap: 7rpx;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms ease;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  width: 70rpx;
+  height: 70rpx;
+  top: 2rpx;
+  left: 50%;
+  border-radius: 50%;
+  background: rgba(138, 126, 107, 0.07);
+  opacity: 0;
+  transform: translateX(-50%) scale(0.76);
+  transition: opacity 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-item:active {
+  transform: translateY(2rpx) scale(0.97);
+  opacity: 1;
+}
+
+.nav-item:active::before {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.nav-icon {
+  width: 48rpx;
+  height: 40rpx;
+  color: #706b61;
+  animation: iconSettle 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.nav-item:nth-child(2) .nav-icon { animation-delay: 70ms; }
+.nav-item:nth-child(3) .nav-icon { animation-delay: 140ms; }
+
+@keyframes iconSettle {
+  0% { opacity: 0; transform: translateY(8rpx) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.nav-label {
+  font-size: 21rpx;
+  color: #69655d;
+  letter-spacing: 3rpx;
+}
+
+/* 册页：记录 */
+.icon-calendar {
+  width: 44rpx;
+  height: 34rpx;
+}
+
+.icon-calendar::before,
+.icon-calendar::after {
+  top: 5rpx;
+  width: 19rpx;
+  height: 25rpx;
+  border: 1.5rpx solid #706b61;
+  background: rgba(255, 255, 255, 0.08);
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.icon-calendar::before {
+  left: 2rpx;
+  border-right: none;
+  border-radius: 5rpx 1rpx 1rpx 4rpx;
+  transform: skewY(3deg);
+  transform-origin: right bottom;
+}
+
+.icon-calendar::after {
+  left: auto;
+  right: 2rpx;
+  border-left: none;
+  border-radius: 1rpx 5rpx 4rpx 1rpx;
+  transform: skewY(-3deg);
+  transform-origin: left bottom;
+}
+
+.icon-calendar .book-spine {
+  left: 50%;
+  top: 5rpx;
+  bottom: 3rpx;
+  width: 1.5rpx;
+  height: auto;
+  background: #706b61;
+  transform: translateX(-50%);
+}
+
+.nav-item:active .icon-calendar::before { transform: perspective(70rpx) rotateY(16deg) skewY(3deg); }
+.nav-item:active .icon-calendar::after { transform: perspective(70rpx) rotateY(-16deg) skewY(-3deg); }
+
+/* 纸笺外传：分享 */
+.icon-share {
+  width: 46rpx;
+  height: 36rpx;
+}
+
+.share-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border: 1.5rpx solid #706b61;
+  background: transparent;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease;
+}
+
+.share-line {
+  height: 1.5rpx;
+  background: #706b61;
+  opacity: 0.9;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-item:active .share-dot-left { transform: scale(0.9); }
+.nav-item:active .share-dot-top { transform: translate(3rpx, -3rpx) scale(1.08); background: rgba(138, 126, 107, 0.12); }
+.nav-item:active .share-dot-bottom { transform: translate(3rpx, 3rpx) scale(1.08); background: rgba(138, 126, 107, 0.12); }
+.nav-item:active .share-line-top { transform: rotate(-29deg) scaleX(1.05); }
+.nav-item:active .share-line-bottom { transform: rotate(29deg) scaleX(1.05); }
+
+/* 三段调节：设置 */
+.icon-settings {
+  width: 40rpx;
+  height: 34rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4rpx 0;
+  box-sizing: border-box;
+}
+
+.icon-settings::before { display: none; }
+
+.slider-row {
+  position: relative;
+  width: 40rpx;
+  height: 1.5rpx;
+  border-radius: 2rpx;
+  background: #706b61;
+}
+
+.slider-knob {
+  position: absolute;
+  top: 50%;
+  width: 7rpx;
+  height: 7rpx;
+  border: 1.5rpx solid #706b61;
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  transition: left 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-sizing: border-box;
+}
+
+.slider-row-1 .slider-knob { left: 29%; }
+.slider-row-2 .slider-knob { left: 70%; }
+.slider-row-3 .slider-knob { left: 46%; }
+.nav-item:active .slider-row-1 .slider-knob { left: 62%; }
+.nav-item:active .slider-row-2 .slider-knob { left: 42%; }
+.nav-item:active .slider-row-3 .slider-knob { left: 72%; }
+
+/* 起课：铜钱只在交互时动 */
+.coin-icon {
+  width: 76rpx;
+  height: 76rpx;
+  margin-top: 8rpx;
+  border-radius: 50%;
+}
+
+.coin-icon::before {
+  content: '';
+  position: absolute;
+  top: 3rpx;
+  right: 3rpx;
+  bottom: 3rpx;
+  left: 3rpx;
+  border-radius: 50%;
+  border: 1rpx solid rgba(138, 126, 107, 0.15);
+  transform: scale(0.88);
+  opacity: 0;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.coin-icon:active::before {
+  opacity: 1;
+  transform: scale(1.16);
+}
+
+.coin-inner-group {
+  width: 60rpx;
+  height: 60rpx;
+  animation: none;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.coin-icon:active .coin-inner-group {
+  animation: coinTap 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.coin-outer {
+  width: 54rpx;
+  height: 54rpx;
+  border-width: 1.5rpx;
+  border-color: #706b61;
+  box-shadow: inset 0 0 0 4rpx rgba(138, 126, 107, 0.045), 0 5rpx 14rpx rgba(67, 60, 49, 0.06);
+}
+
+.coin-inner {
+  width: 15rpx;
+  height: 15rpx;
+  border-width: 1.5rpx;
+  border-color: #706b61;
+  border-radius: 1rpx;
+}
+
+@keyframes coinTap {
+  0% { transform: rotate(0deg) scale(1); }
+  45% { transform: rotate(-10deg) scale(0.94); }
+  75% { transform: rotate(7deg) scale(1.04); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.coin-inner-group.casting {
+  animation: coinCasting 1.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* 印章落位 */
+.seal {
+  animation: sealLand 520ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+}
+
+@keyframes sealLand {
+  0% { opacity: 0; transform: rotate(-18deg) translateY(-8rpx) scale(1.12); }
+  70% { opacity: 1; transform: rotate(-8deg) translateY(1rpx) scale(0.96); }
+  100% { opacity: 1; transform: rotate(-10deg) translateY(0) scale(1); }
+}
+
+.dark-page .nav-item::before { background: rgba(190, 190, 180, 0.08); }
+.dark-page .nav-label { color: #96968d; }
+.dark-page .icon-calendar::before,
+.dark-page .icon-calendar::after { border-color: #96968d; background: rgba(255,255,255,0.02); }
+.dark-page .icon-calendar .book-spine,
+.dark-page .share-line,
+.dark-page .slider-row { background: #96968d; }
+.dark-page .share-dot,
+.dark-page .slider-knob { border-color: #96968d; background: #2a2a28; }
+.dark-page .coin-outer,
+.dark-page .coin-inner { border-color: #96968d; }

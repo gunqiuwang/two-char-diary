@@ -2,89 +2,69 @@
 type: home
 status: active
 confidence: high
-last_updated: 2026-06-02
+last_updated: 2026-07-10
 owner: both
-reviewed_by: human
-aliases: ["二字日记", "二字日记 Home", "two-char-diary"]
+reviewed_by: agent
+aliases: ["二字爻记", "二字日记", "two-char-diary"]
 ---
 
-# 🏠 二字日记 — Agent Vault
+# 🏠 二字爻记 — Agent Vault
 
-> 每天用「两个字」和「一个爻卦」记录当天。微信小程序。
+> 每天用两个字记录当天，再以一卦作为传统文化注脚。原生微信小程序。
 
 ## Quick Facts
 
 | Key | Value |
-|-----|-------|
-| **Project** | 二字日记 (two-char-diary) |
-| **Type** | 微信小程序 |
-| **Stable Branch** | master |
-| **HEAD Commit** | `e5242c1` — init: 二字爻记微信小程序 |
-| **Production Status** | 未发布（开发中） |
-| **Phase** | mvp |
-| **GitHub** | https://github.com/gunqiuwang/two-char-diary |
-| **Vault Schema** | [[VAULT_SCHEMA]] v4.1.0 |
-| **Last Updated** | 2026-06-02 |
+|---|---|
+| Project | 二字爻记 (`two-char-diary`) |
+| Platform | 微信小程序原生 WXML/WXSS/JS |
+| Stable Branch | `master` |
+| Audit HEAD | `8338457` |
+| Production | 未发布 |
+| Phase | Release Candidate 0 |
+| Storage | 本地 Storage，无后端、无登录 |
+| Base Library | `3.15.0` 稳定版 |
+| Latest Audit | `docs/PROJECT_AUDIT_2026-07-10.md` |
+| Submission Checklist | `docs/WECHAT_SUBMISSION_CHECKLIST.md` |
 
-## Most Important Files
+## Source of Truth
 
-| File | Why It Matters | Confidence |
-|------|---------------|------------|
-| `miniprogram/app.js` | 入口 + 六十四卦数据 (HEX_DATA) | high |
-| `miniprogram/pages/index/index.js` | 首页核心逻辑：米字框输入 + 铜钱动画 + 爻卦生成 | high |
-| `miniprogram/app.wxss` | 全局 Kami 样式（暖米白底色） | high |
-| `miniprogram/utils/words.js` | 二字词库 | high |
-| `PROJECT-REVIEW.md` | 完整项目评估报告（已知问题清单） | high |
+1. `README.md` — 项目概览与命令
+2. `PROJECT-REVIEW.md` — 当前评估摘要
+3. `docs/PROJECT_AUDIT_2026-07-10.md` — 详细审计
+4. `docs/WECHAT_SUBMISSION_CHECKLIST.md` — 提审验收
+5. `docs/vault/01_CURRENT_BASELINE.md` — Agent 当前基线
 
-## Most Important Commands
+## Critical Files
 
-| Command | Purpose | Risk |
-|---------|---------|------|
-| 微信开发者工具「编译」 | 本地预览 | 🟢 Safe |
-| 微信开发者工具「上传」 | 上传到微信后台 | 🔴 Deploy |
-| `git push origin master` | 推送到 GitHub | 🟡 Medium |
+| File | Responsibility |
+|---|---|
+| `miniprogram/pages/index/index.js` | 今日二字、统计、起卦 |
+| `miniprogram/pages/share/share.js` | 跨设备分享、Canvas、相册 |
+| `miniprogram/pages/calendar/calendar.js` | 年历与历史记录 |
+| `miniprogram/pages/settings/settings.js` | 主题、导出、清除 |
+| `miniprogram/utils/hexdata.js` | 六十四卦与六爻 |
+| `miniprogram/utils/lunar.js` | 农历换算 |
+| `test-project.js` | 项目静态验证 |
+| `test-lunar.js` | 农历样例测试 |
 
-## 🔴 Agent Entry Page
+## Mandatory Agent Reading Order
 
-> **Every new Agent MUST read this page first.**
+1. `00_HOME.md`
+2. `01_CURRENT_BASELINE.md`
+3. `03_DO_NOT_TOUCH.md`
+4. `04_ARCHITECTURE.md`
+5. `05_COMMANDS_AND_FILES.md`
+6. 与任务相关的审计或验收文档
 
-**Mandatory reading order:**
-1. [[00_HOME]] — You are here
-2. [[01_CURRENT_BASELINE]] — Source of truth
-3. [[03_DO_NOT_TOUCH]] — Danger zones + security rules
-4. [[05_COMMANDS_AND_FILES]] — What you can run
-5. [[VAULT_SCHEMA]] — Vault rules + write protocol
-6. Task-specific vault note
+## Current Release Blockers
 
-**After completing any task, you MUST:**
-- Update [[01_CURRENT_BASELINE]] if branch/commit/status changed
-- Append to [[10_REPORT_INDEX]] if a report was generated (full report → assets/intake/reports/)
-- Append to [[VAULT_CHANGELOG]]
-
-## Current Known Risks
-
-| Risk | Severity | Confidence | Mitigation |
-|------|----------|------------|------------|
-| 分享页二字偶发丢失 | 🔴 High | high | 统一从存储读取所有数据 |
-| Canvas 海报二字可能为空 | 🔴 High | high | generateCard() 需从存储兜底 |
-| 爻辞数据不完整 | 🟡 Medium | high | HEX_DATA 缺完整六爻爻辞 |
-| 铜钱 result 态 opacity 太淡 | 🟢 Low | medium | 可调至 0.6-0.7 |
+- 微信后台隐私保护指引未在本地代码审计中验证
+- 服务类目、名称、简介、截图仍需后台核对
+- iOS / Android / HarmonyOS 真机未完成最终验收
+- 好友与朋友圈需两个微信账号交叉验证
+- 开发者工具代码质量、体验评分和上传前预检待执行
 
 ## Next Recommended Action
 
-修复 PROJECT-REVIEW.md 中的高优先级问题：分享页二字丢失 + Canvas 空值。
-
-## Vault Navigation
-
-- [[01_CURRENT_BASELINE]] — Where we are now
-- [[02_DECISION_LOG]] — Why we made key choices
-- [[03_DO_NOT_TOUCH]] — Danger zones
-- [[04_ARCHITECTURE]] — How it all fits together
-- [[05_COMMANDS_AND_FILES]] — What you can run and touch
-- [[06_DEPLOYMENT]] — How to ship it
-- [[07_TESTING_AND_VERIFICATION]] — How to verify it works
-- [[08_INCIDENTS_AND_FIXES]] — What broke and how we fixed it
-- [[09_AGENT_PROMPTS]] — Reusable prompts
-- [[10_REPORT_INDEX]] — Reports at a glance
-- [[VAULT_SCHEMA]] — Vault rules
-- [[VAULT_CHANGELOG]] — Vault log
+按 `docs/WECHAT_SUBMISSION_CHECKLIST.md` 完成双设备真机回归和微信后台隐私/类目配置。
