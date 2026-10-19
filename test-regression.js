@@ -325,6 +325,13 @@ function loadPage(pagePath, wx) {
   delete global.App
 }
 
+{
+  const page = loadPage('./miniprogram/pages/share/share.js', createWx({ diary_data: {} }).wx)
+  const ctx = { measureText: text => ({ width: Array.from(text).length * 24 }) }
+  const lines = page.wrapText(ctx, '君子几不如舍，往吝', 24 * 6)
+  check('海报换行时标点不在行首', lines.every(line => !/^[，。、；：！？]/.test(line)), JSON.stringify(lines))
+}
+
 check('项目描述使用现行品牌名', JSON.parse(fs.readFileSync(path.join(__dirname, 'miniprogram', 'project.config.json'), 'utf8')).description.startsWith('二字爻记'))
 
 // 保存相册的错误分支是异步的，且依赖全局 wx，放在最后顺序执行

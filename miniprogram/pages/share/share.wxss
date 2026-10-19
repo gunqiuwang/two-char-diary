@@ -573,6 +573,12 @@
   height: 1200px;
 }
 
+/* 封面画布的 CSS 尺寸须与绘制尺寸一致，否则导出区域会被缩放 */
+.cover-canvas {
+  width: 500px;
+  height: 400px;
+}
+
 /* ===== 暗色模式 ===== */
 .dark-page .back-arrow {
   border-color: #8a8a80;

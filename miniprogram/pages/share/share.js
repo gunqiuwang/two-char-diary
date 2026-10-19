@@ -499,8 +499,7 @@ Page({
         }
 
         wx.canvasToTempFilePath({
-          canvas, x: 0, y: 0, width: w, height: h,
-          destWidth: w * dpr, destHeight: h * dpr,
+          canvas,
           success: (r) => resolve(r.tempFilePath),
           fail: reject
         })
@@ -513,7 +512,8 @@ Page({
     let line = ''
     for (const char of text) {
       const nextLine = line + char
-      if (line && ctx.measureText(nextLine).width > maxWidth) {
+      // 标点不放到行首，允许略微超出
+      if (line && ctx.measureText(nextLine).width > maxWidth && !'，。、；：！？）」』”'.includes(char)) {
         lines.push(line)
         line = char
       } else {
