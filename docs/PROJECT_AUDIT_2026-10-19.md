@@ -260,3 +260,25 @@ solarToLunar(1899, 6, 1) → "己亥年 正月undefined"
 - 老用户升级后的迁移（建议用体验版装旧版本，写入数据后再覆盖安装新版）；
 - 剪贴板导出 / 导入，以及隐私弹窗；
 - 回滚风险：若发布后回退到 v1 代码，v1 读不到 `yao` 字段，当天会显示为未起卦（字仍可见）。
+
+---
+
+## 8. P2 修复记录
+
+| 编号 | 修复方式 | 文件 |
+|---|---|---|
+| N7 | 节气/节日推荐词与随机词合并后去重，固定取 8 个 | `pages/index/index.js` |
+| N8 | 分享卡片封面另画一张 500×400（5:4）的图，只含日期、二字和卦名；长图海报只用于保存 | `pages/share/share.js/.wxml` |
+| N9 | 保存相册的错误按 errno 区分：112（隐私指引未声明）、104（用户未同意隐私指引）、103 / auth deny（引导去设置）。**errno 取值需真机确认** | `pages/share/share.js` |
+| N11 | `wx.getUpdateManager` 在新版本下载完成后提示重启 | `app.js` |
+| N12 | 输入时去掉空白，`commitWords` 拒绝空白字 | `pages/index/index.js` |
+| N13 | 清除数据时，只起卦未记字的记录也会被清除（年历仍只展示有字的日子，未改） | `pages/settings/settings.js` |
+| A1 | `project.config.json` 描述改为「二字爻记」 | `project.config.json` |
+| A4 | 海报高度改为按实际字号和宽度 `wrapText` 计算，不再估算 | `pages/share/share.js` |
+| A5 | `App.onError` / `onUnhandledRejection` 写入实时日志（`wx.getRealtimeLogManager`），可在公众平台「运维中心 → 实时日志」查看 | `app.js` |
+
+顺带把米字格绘制和配色抽成 `drawMiZi` / `getPalette`，海报和封面共用。
+
+`test-regression.js` 新增 10 项检查（共 6 047 项）：灵感词去重、空白字、只起卦记录的清除、三类保存错误、更新提示、实时日志、品牌名。去掉去重或还原清除条件，都会被测试发现。
+
+未处理：N10（输入法组合输入，需真机验证）、N14（动爻/变卦，属产品决策）、P3 样式收敛。

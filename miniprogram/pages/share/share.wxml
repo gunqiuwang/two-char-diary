@@ -91,4 +91,5 @@
   </view>
 
   <canvas type="2d" id="shareCanvas" class="hidden-canvas"></canvas>
+  <canvas type="2d" id="coverCanvas" class="hidden-canvas"></canvas>
 </view>

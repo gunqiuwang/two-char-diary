@@ -1,5 +1,5 @@
 {
-  "description": "二字日记 - 每天用两个字和一个爻卦记录当天",
+  "description": "二字爻记 - 每天用两个字和一个爻卦记录当天",
   "packOptions": {
     "ignore": [],
     "include": []

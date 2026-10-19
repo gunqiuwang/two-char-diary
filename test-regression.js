@@ -262,12 +262,99 @@ function loadPage(pagePath, wx) {
   check('设置页起卦次数按新结构统计', importer.data.dataOverview.casts === 1 && importer.data.dataOverview.days === 1)
 }
 
-delete global.wx
-delete global.Page
-
-if (failures.length) {
-  console.error(`回归测试失败：${failures.length} / ${checks}`)
-  failures.slice(0, 30).forEach(item => console.error(`- ${item}`))
-  process.exit(1)
+// ---------- 9. P2 修复 ----------
+{
+  // 灵感词：2026-06-21 夏至，节气词表含「夏至」，与随机词库重叠
+  const RealDate = Date
+  global.Date = class extends RealDate {
+    constructor(...args) { super(...(args.length ? args : [2026, 5, 21, 12])) }
+    static now() { return new RealDate(2026, 5, 21, 12).getTime() }
+  }
+  const page = loadPage('./miniprogram/pages/index/index.js', createWx({ diary_data: {} }).wx)
+  let ok = true
+  for (let i = 0; i < 300; i++) {
+    page.initCandidates()
+    const words = page.data.candidateWords
+    if (words.length !== 8 || new Set(words).size !== 8 || words[0] !== '夏至') ok = false
+  }
+  global.Date = RealDate
+  check('灵感词不重复且保持 8 个', ok, JSON.stringify(page.data.candidateWords))
 }
-console.log(`回归测试通过：${checks} 项检查`)
+
+{
+  const storage = { diary_data: {} }
+  const page = loadPage('./miniprogram/pages/index/index.js', createWx(storage).wx)
+  page.commitWords([' ', '静'])
+  check('空格不能作为字保存', Object.keys(storage.diary_data).length === 0 && !page.data.isRecorded)
+  page.onInput1({ detail: { value: ' 平' } })
+  check('输入时去掉空白', page.data.char1 === '平')
+}
+
+{
+  const storage = { diary_data: { '2026-10-18': { yao: '777777' } } }
+  const { wx } = createWx(storage, { showModal(options) { if (options.success) options.success({ confirm: true }) } })
+  const page = loadPage('./miniprogram/pages/settings/settings.js', wx)
+  page.refreshOverview()
+  page.clearData()
+  check('只起卦的记录也能清除', Object.keys(storage.diary_data).length === 0)
+}
+
+
+{
+  const handlers = {}
+  const { wx, calls } = createWx({}, {
+    getUpdateManager() {
+      return { onUpdateReady(fn) { handlers.ready = fn }, applyUpdate() { handlers.applied = true } }
+    },
+    getRealtimeLogManager() { return { error(...args) { handlers.logged = args } } },
+    showModal(options) { calls.modal.push(options); options.success({ confirm: true }) }
+  })
+  global.wx = wx
+  let app
+  global.App = def => { app = def }
+  freshRequire('./miniprogram/utils/diary')
+  const realConsoleError = console.error
+  console.error = () => {}
+  freshRequire('./miniprogram/app.js')
+  app.onLaunch()
+  handlers.ready && handlers.ready()
+  app.onError('TypeError: x is undefined')
+  console.error = realConsoleError
+  check('有新版本时提示重启', calls.modal.length === 1 && handlers.applied === true)
+  check('运行时错误写入实时日志', handlers.logged && handlers.logged[0] === 'onError')
+  delete global.App
+}
+
+check('项目描述使用现行品牌名', JSON.parse(fs.readFileSync(path.join(__dirname, 'miniprogram', 'project.config.json'), 'utf8')).description.startsWith('二字爻记'))
+
+// 保存相册的错误分支是异步的，且依赖全局 wx，放在最后顺序执行
+async function checkSaveImageErrors() {
+  async function saveWith(error) {
+    const { wx, calls } = createWx({ diary_data: {} }, {
+      saveImageToPhotosAlbum({ fail }) { fail(error) }
+    })
+    const page = loadPage('./miniprogram/pages/share/share.js', wx)
+    page.data.words = '平静'
+    page.generateCard = async () => 'tmp.png'
+    await page.saveImage()
+    return calls
+  }
+  let calls = await saveWith({ errMsg: 'saveImageToPhotosAlbum:fail api scope is not declared in the privacy agreement', errno: 112 })
+  check('隐私未声明给出明确提示', calls.toast[0] && calls.toast[0].title === '暂不支持保存到相册' && calls.modal.length === 0)
+  calls = await saveWith({ errMsg: 'saveImageToPhotosAlbum:fail privacy permission is not authorized', errno: 104 })
+  check('未同意隐私指引给出提示', calls.toast[0] && calls.toast[0].title.includes('隐私') && calls.modal.length === 0)
+  calls = await saveWith({ errMsg: 'saveImageToPhotosAlbum:fail auth deny', errno: 103 })
+  check('拒绝相册权限引导去设置', calls.modal.length === 1)
+}
+
+checkSaveImageErrors().then(() => {
+  delete global.wx
+  delete global.Page
+
+  if (failures.length) {
+    console.error(`回归测试失败：${failures.length} / ${checks}`)
+    failures.slice(0, 30).forEach(item => console.error(`- ${item}`))
+    process.exit(1)
+  }
+  console.log(`回归测试通过：${checks} 项检查`)
+})

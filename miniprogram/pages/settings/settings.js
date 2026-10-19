@@ -86,15 +86,17 @@ Page({
 
   clearData() {
     const days = this.data.dataOverview.days
+    // 只起卦未记字的日子不计入天数，但也要能清掉
+    const hasData = Object.keys(loadDiary()).length > 0
     wx.showModal({
       title: '确认清除',
       content: days
         ? `将删除本机全部 ${days} 天记录，此操作不可恢复。`
-        : '本机目前没有记录。',
+        : hasData ? '将删除本机的起卦记录，此操作不可恢复。' : '本机目前没有记录。',
       confirmText: '清除',
       confirmColor: '#e64340',
       success: res => {
-        if (!res.confirm || !days) return
+        if (!res.confirm || !hasData) return
         wx.setStorageSync('diary_data', {})
         this.refreshOverview()
         wx.showToast({ title: '已清除', icon: 'success' })

@@ -180,9 +180,8 @@ Page({
     
     let words
     if (dailyWords) {
-      // 节气推荐词 + 随机词
-      const randomWords = getRandomWords(4)
-      words = [...dailyWords, ...randomWords]
+      // 节气推荐词 + 随机词，去重后取 8 个（两边词库有重叠）
+      words = [...new Set([...dailyWords, ...getRandomWords(8)])].slice(0, 8)
     } else {
       words = getRandomWords(8)
     }
@@ -238,7 +237,7 @@ Page({
   },
 
   onInput1(e) {
-    const valueChars = Array.from(e.detail.value || '')
+    const valueChars = Array.from((e.detail.value || '').replace(/\s/g, ''))
     const chars = [this.data.char1 || '', this.data.char2 || '']
 
     if (valueChars.length >= 2) {
@@ -267,7 +266,7 @@ Page({
   },
 
   onInput2(e) {
-    const valueChars = Array.from(e.detail.value || '')
+    const valueChars = Array.from((e.detail.value || '').replace(/\s/g, ''))
     const chars = [this.data.char1 || '', this.data.char2 || '']
 
     if (valueChars.length >= 2) {
@@ -328,7 +327,7 @@ Page({
 
   commitWords(sourceChars) {
     const chars = Array.from(sourceChars || []).slice(0, 2)
-    if (chars.length !== 2 || chars.some(char => !char)) return
+    if (chars.length !== 2 || chars.some(char => !char || !char.trim())) return
 
     const words = chars.join('')
     const today = getTodayKey()
