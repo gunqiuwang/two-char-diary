@@ -1,5 +1,6 @@
 // pages/calendar/calendar.js
-const { solarToLunar } = require('../../utils/lunar')
+const { solarToLunar, MIN_YEAR, MAX_YEAR } = require('../../utils/lunar')
+const { loadDiary, getHexView } = require('../../utils/diary')
 const { loadBgStyle, getWindowInfoSafe } = require('../../utils/common')
 
 const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
@@ -114,26 +115,24 @@ Page({
   },
 
   loadDetail(dateStr) {
-    const diaryData = wx.getStorageSync('diary_data') || {}
-    const d = diaryData[dateStr]
+    const d = loadDiary()[dateStr]
 
     if (d && d.words) {
-      const [y, m, day] = dateStr.split('-')
-      const lunar = solarToLunar(parseInt(y), parseInt(m), parseInt(day))
-      const lunarText = `${lunar.monthText}${lunar.dayText}`
+      const [y, m, day] = dateStr.split('-').map(Number)
+      const lunar = solarToLunar(y, m, day)
+      const lunarText = lunar ? `${lunar.monthText}${lunar.dayText}` : ''
 
-      const yaoTexts = d.yaoTexts || []
+      const hex = getHexView(d)
+      const yaoTexts = hex ? hex.yaoTexts : []
       const wordChars = Array.from(d.words || '').slice(0, 2)
-      const selectedHexLines = Array.isArray(d.yaos)
-        ? d.yaos.slice().reverse().map((yao, index) => ({ key: index, type: yao.type }))
-        : []
+      const selectedHexLines = hex ? hex.hexLines : []
       this.setData({
-        selectedDateLabel: `${parseInt(m)}月${parseInt(day)}日`,
+        selectedDateLabel: `${m}月${day}日`,
         selectedData: {
           words: d.words,
-          hexagramSymbol: d.hexagramSymbol || '',
-          hexagramName: d.hexagramName || '',
-          hexagramText: d.hexagramText || '',
+          hexagramSymbol: hex ? hex.symbol : '',
+          hexagramName: hex ? hex.name : '',
+          hexagramText: hex ? hex.ci : '',
           yaoTexts
         },
         selectedLunar: lunarText,
@@ -170,10 +169,12 @@ Page({
   },
 
   prevYear() {
+    if (this.data.year <= MIN_YEAR) return
     this.changeCalendar({ year: this.data.year - 1 })
   },
 
   nextYear() {
+    if (this.data.year >= MAX_YEAR) return
     this.changeCalendar({ year: this.data.year + 1 })
   },
 

@@ -3,7 +3,7 @@
 > 日期：2026-08-20
 > 上游文档：`docs/PROJECT_AUDIT_2026-08-20.md`、`docs/UPGRADE_V2_AI_DESIGN.md`
 > 用法：每个任务含【目标】【步骤】【验收标准】三块。验收标准全部可客观判定，全部通过才算任务完成。
-> 全局约束：任何阶段完成后 `node test-project.js && node test-lunar.js` 必须通过；断网/无云环境下 v1 功能不得回退。
+> 全局约束：任何阶段完成后 `node test-project.js && node test-lunar.js && node test-regression.js` 必须通过；断网/无云环境下 v1 功能不得回退。
 
 ---
 

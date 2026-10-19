@@ -14,6 +14,7 @@ reviewed_by: agent
 ```bash
 node test-project.js
 node test-lunar.js
+node test-regression.js
 ```
 
 Additional read-only checks:
@@ -45,6 +46,7 @@ find miniprogram -maxdepth 4 -type f | sort
 | `docs/WECHAT_SUBMISSION_CHECKLIST.md` | Manual release checklist |
 | `test-project.js` | Static project verification |
 | `test-lunar.js` | Lunar sample verification |
+| `test-regression.js` | Regression: lunar/solar terms vs HKO, storage migration, backup, share params |
 | `miniprogram/project.config.json` | Shared DevTools config |
 | `miniprogram/project.private.config.json` | Local-only; must stay ignored |
 

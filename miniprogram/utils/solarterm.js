@@ -2,21 +2,51 @@
 
 const { monthDays } = require('./lunar')
 
-// 节气数据（基于太阳黄经，简化算法）
-// 节气日期在公历中基本固定，少数年份有1天偏差
-const SOLAR_TERMS = {
-  1: [{ day: 5, name: '小寒' }, { day: 20, name: '大寒' }],
-  2: [{ day: 4, name: '立春' }, { day: 19, name: '雨水' }],
-  3: [{ day: 6, name: '惊蛰' }, { day: 21, name: '春分' }],
-  4: [{ day: 5, name: '清明' }, { day: 20, name: '谷雨' }],
-  5: [{ day: 6, name: '立夏' }, { day: 21, name: '小满' }],
-  6: [{ day: 6, name: '芒种' }, { day: 21, name: '夏至' }],
-  7: [{ day: 7, name: '小暑' }, { day: 23, name: '大暑' }],
-  8: [{ day: 7, name: '立秋' }, { day: 23, name: '处暑' }],
-  9: [{ day: 8, name: '白露' }, { day: 23, name: '秋分' }],
-  10: [{ day: 8, name: '寒露' }, { day: 23, name: '霜降' }],
-  11: [{ day: 7, name: '立冬' }, { day: 22, name: '小雪' }],
-  12: [{ day: 7, name: '大雪' }, { day: 22, name: '冬至' }]
+// 节气：按太阳视黄经计算（Meeus 低精度公式，约 0.01°），以北京时间判定日期。
+// 每月两个节气，第 m 月对应黄经 285+30(m-1) 与再加 15 度。
+const SOLAR_TERM_NAMES = [
+  '小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨',
+  '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑',
+  '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', '冬至'
+]
+
+// 交节时刻贴近午夜时公式会差一天。以下按香港天文台 1901–2050 历表校正：计算日期 -> 实际日期
+const SOLAR_TERM_FIXES = {
+  '1912-10-8': '1912-10-9', '1912-11-22': '1912-11-23', '1913-9-23': '1913-9-24',
+  '1923-2-20': '1923-2-19', '1927-9-9': '1927-9-8', '1928-6-22': '1928-6-21',
+  '1950-4-21': '1950-4-20', '1951-12-22': '1951-12-23', '1979-1-20': '1979-1-21',
+  '2014-3-5': '2014-3-6', '2016-7-6': '2016-7-7', '2045-7-6': '2045-7-7',
+  '2047-3-5': '2047-3-6'
+}
+const SOLAR_TERM_FIXED_TO = Object.keys(SOLAR_TERM_FIXES).reduce((map, from) => {
+  map[SOLAR_TERM_FIXES[from]] = from
+  return map
+}, {})
+
+const RAD = Math.PI / 180
+
+function sunLongitude(ms) {
+  const T = (ms / 86400000 + 2440587.5 - 2451545) / 36525
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T
+  const M = (357.52911 + 35999.05029 * T - 0.0001537 * T * T) * RAD
+  const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(M) +
+    (0.019993 - 0.000101 * T) * Math.sin(2 * M) + 0.000289 * Math.sin(3 * M)
+  const omega = (125.04 - 1934.136 * T) * RAD
+  const lambda = L0 + C - 0.00569 - 0.00478 * Math.sin(omega)
+  return ((lambda % 360) + 360) % 360
+}
+
+// 北京时间当日 0 点到次日 0 点之间，太阳是否越过该月某个节气的黄经
+function computeSolarTerm(year, month, day) {
+  const start = sunLongitude(Date.UTC(year, month - 1, day) - 8 * 3600000)
+  const end = sunLongitude(Date.UTC(year, month - 1, day + 1) - 8 * 3600000)
+  for (let k = 0; k < 2; k++) {
+    const target = (285 + 30 * (month - 1) + 15 * k) % 360
+    const before = ((start - target + 540) % 360) - 180
+    const after = ((end - target + 540) % 360) - 180
+    if (before < 0 && after >= 0) return SOLAR_TERM_NAMES[(month - 1) * 2 + k]
+  }
+  return null
 }
 
 // 公历节日
@@ -106,15 +136,14 @@ const FESTIVAL_WORDS = {
 }
 
 // 获取今日节气
-function getSolarTerm(month, day) {
-  const terms = SOLAR_TERMS[month]
-  if (!terms) return null
-  for (const term of terms) {
-    if (day === term.day) return term.name
-    // 节气前后1天也算
-    if (Math.abs(day - term.day) === 1) return term.name
+function getSolarTerm(year, month, day) {
+  const key = `${year}-${month}-${day}`
+  if (SOLAR_TERM_FIXES[key]) return null
+  if (SOLAR_TERM_FIXED_TO[key]) {
+    const [y, m, d] = SOLAR_TERM_FIXED_TO[key].split('-').map(Number)
+    return computeSolarTerm(y, m, d)
   }
-  return null
+  return computeSolarTerm(year, month, day)
 }
 
 // 获取今日节日（公历）
@@ -128,8 +157,9 @@ function getLunar12MonthDays(year) {
   return monthDays(year, 12)
 }
 
-// 获取今日节日（农历）
-function getLunarFestival(lunarMonth, lunarDay, lunarYear) {
+// 获取今日节日（农历）。闰月不过节。
+function getLunarFestival(lunarMonth, lunarDay, lunarYear, isLeap) {
+  if (isLeap || !lunarMonth) return null
   // 处理除夕：腊月最后一天
   if (lunarMonth === 12 && lunarDay === 29) {
     // 如果腊月只有29天，这一天也是除夕
@@ -141,21 +171,25 @@ function getLunarFestival(lunarMonth, lunarDay, lunarYear) {
   return LUNAR_FESTIVALS[`${lunarMonth}-${lunarDay}`] || null
 }
 
-// 获取每日推荐词
-function getDailyWords(month, day, lunarMonth, lunarDay, lunarYear) {
+function getLunarFestivalOf(lunar) {
+  return lunar ? getLunarFestival(lunar.lunarMonth, lunar.lunarDay, lunar.lunarYear, lunar.isLeap) : null
+}
+
+// 获取每日推荐词。lunar 为 solarToLunar 的结果，超出农历范围时为 null
+function getDailyWords(year, month, day, lunar) {
   // 优先使用节日推荐词
   const solarFestival = getSolarFestival(month, day)
   if (solarFestival && FESTIVAL_WORDS[solarFestival]) {
     return FESTIVAL_WORDS[solarFestival]
   }
-  
-  const lunarFestival = getLunarFestival(lunarMonth, lunarDay, lunarYear)
+
+  const lunarFestival = getLunarFestivalOf(lunar)
   if (lunarFestival && FESTIVAL_WORDS[lunarFestival]) {
     return FESTIVAL_WORDS[lunarFestival]
   }
-  
+
   // 使用节气推荐词
-  const solarTerm = getSolarTerm(month, day)
+  const solarTerm = getSolarTerm(year, month, day)
   if (solarTerm && SOLAR_TERM_WORDS[solarTerm]) {
     return SOLAR_TERM_WORDS[solarTerm]
   }
@@ -164,10 +198,10 @@ function getDailyWords(month, day, lunarMonth, lunarDay, lunarYear) {
 }
 
 // 获取今日特殊日期描述（节气/节日）
-function getSpecialDate(month, day, lunarMonth, lunarDay, lunarYear) {
+function getSpecialDate(year, month, day, lunar) {
   const solarFestival = getSolarFestival(month, day)
-  const lunarFestival = getLunarFestival(lunarMonth, lunarDay, lunarYear)
-  const solarTerm = getSolarTerm(month, day)
+  const lunarFestival = getLunarFestivalOf(lunar)
+  const solarTerm = getSolarTerm(year, month, day)
   
   // 优先级：农历节日 > 公历节日 > 节气
   return lunarFestival || solarFestival || solarTerm || null

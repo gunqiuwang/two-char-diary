@@ -53,6 +53,22 @@
       </view>
     </view>
 
+    <view class="setting-item" bindtap="exportData">
+      <view class="setting-copy">
+        <view class="setting-label">导出备份</view>
+        <view class="setting-caption">复制全部记录到剪贴板</view>
+      </view>
+      <view class="setting-arrow"></view>
+    </view>
+
+    <view class="setting-item" bindtap="importData">
+      <view class="setting-copy">
+        <view class="setting-label">从剪贴板导入</view>
+        <view class="setting-caption">恢复导出的备份，不覆盖本机已有内容</view>
+      </view>
+      <view class="setting-arrow"></view>
+    </view>
+
     <view class="setting-item danger-item" bindtap="clearData">
       <view class="setting-copy">
         <view class="setting-label">清除所有数据</view>

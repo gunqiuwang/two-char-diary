@@ -14,6 +14,7 @@ reviewed_by: agent
 ```bash
 node test-project.js
 node test-lunar.js
+node test-regression.js
 ```
 
 Current result:

@@ -1,9 +1,9 @@
 // pages/index/index.js
-const { HEX_DATA } = require('../../utils/hexdata')
 const { solarToLunar } = require('../../utils/lunar')
 const { getRandomWords } = require('../../utils/words')
 const { getTodayKey, loadBgStyle, getWindowInfoSafe } = require('../../utils/common')
 const { getSpecialDate, getDailyWords } = require('../../utils/solarterm')
+const { loadDiary, saveDiary, yaosToCode, getHexView } = require('../../utils/diary')
 
 Page({
   data: {
@@ -25,7 +25,6 @@ Page({
     candidateWords: [],
 
     castingState: 'idle',
-    yaos: [],
     displayYaos: [],
     hexagramSymbol: '',
     hexagramName: '',
@@ -85,20 +84,19 @@ Page({
     const day = now.getDate()
 
     const lunar = solarToLunar(year, month, day)
-    const lunarYear = `${lunar.ganZhiYear}年`
-    const lunarMonthDay = `${lunar.monthText}${lunar.dayText}`
+    const lunarYear = lunar ? `${lunar.ganZhiYear}年` : ''
+    const lunarMonthDay = lunar ? `${lunar.monthText}${lunar.dayText}` : ''
     const solarDate = `${month}月${day}日`
 
     // 获取节气/节日
-    const specialDate = getSpecialDate(month, day, lunar.lunarMonth, lunar.lunarDay, lunar.lunarYear)
+    const specialDate = getSpecialDate(year, month, day, lunar)
     
     this.setData({ lunarYear, lunarMonthDay, solarDate, specialDate })
   },
 
   loadToday() {
     const today = getTodayKey()
-    const data = wx.getStorageSync('diary_data') || {}
-    const d = data[today] || {}
+    const d = loadDiary()[today] || {}
 
     const update = {}
 
@@ -119,21 +117,17 @@ Page({
       update.input2 = ''
     }
 
-    if (d.yaos && d.yaos.length === 6) {
-      const hex = this.getHex(d.yaos)
-      const yaoTexts = d.yaoTexts || (hex.yaos ? hex.yaos.slice().reverse() : [])
-      const hexLines = d.yaos.slice().reverse().map((y, index) => ({ key: index, type: y.type }))
+    const hex = getHexView(d)
+    if (hex) {
       update.castingState = 'result'
-      update.yaos = d.yaos
-      update.displayYaos = yaoTexts
-      update.hexagramSymbol = hex.symbol || ''
+      update.displayYaos = hex.yaoTexts
+      update.hexagramSymbol = hex.symbol
       update.hexagramName = hex.name
       update.hexagramText = hex.ci
-      update.hexLines = hexLines
+      update.hexLines = hex.hexLines
       update.hasCastToday = true
     } else {
       update.castingState = 'idle'
-      update.yaos = []
       update.displayYaos = []
       update.hexagramSymbol = ''
       update.hexagramName = ''
@@ -176,12 +170,13 @@ Page({
   // 备选词功能
   initCandidates() {
     const now = new Date()
+    const year = now.getFullYear()
     const month = now.getMonth() + 1
     const day = now.getDate()
-    const lunar = solarToLunar(now.getFullYear(), month, day)
+    const lunar = solarToLunar(year, month, day)
     
     // 优先使用节气/节日推荐词
-    const dailyWords = getDailyWords(month, day, lunar.lunarMonth, lunar.lunarDay, lunar.lunarYear)
+    const dailyWords = getDailyWords(year, month, day, lunar)
     
     let words
     if (dailyWords) {
@@ -337,15 +332,9 @@ Page({
 
     const words = chars.join('')
     const today = getTodayKey()
-    const data = wx.getStorageSync('diary_data') || {}
-    data[today] = {
-      ...data[today],
-      words,
-      lunarYear: this.data.lunarYear,
-      lunarMonthDay: this.data.lunarMonthDay,
-      timestamp: Date.now()
-    }
-    wx.setStorageSync('diary_data', data)
+    const data = loadDiary()
+    data[today] = { ...data[today], words, timestamp: Date.now() }
+    if (!saveDiary(data)) return
 
     if (this._editTimer) {
       clearTimeout(this._editTimer)
@@ -373,9 +362,7 @@ Page({
     if (this.data.castingState === 'casting') return
 
     const today = getTodayKey()
-    const data = wx.getStorageSync('diary_data') || {}
-    const todayRecord = data[today] || {}
-    if (this.data.hasCastToday || (todayRecord.yaos && todayRecord.yaos.length === 6)) {
+    if (this.data.hasCastToday || getHexView(loadDiary()[today])) {
       wx.showToast({ title: '今日已起卦', icon: 'none', duration: 1000 })
       this.loadToday()
       return
@@ -383,13 +370,11 @@ Page({
 
     const yaos = []
     for (let i = 0; i < 6; i++) yaos.push(this.genYao())
-    const hex = this.getHex(yaos)
-    const yaoTexts = (hex.yaos || []).slice().reverse()
-    const hexLines = yaos.slice().reverse().map((y, index) => ({ key: index, type: y.type }))
+    const yao = yaosToCode(yaos)
+    const hex = getHexView({ yao })
 
     this.setData({
       castingState: 'casting',
-      yaos: [],
       displayYaos: [],
       hexagramSymbol: '',
       hexagramName: '',
@@ -401,17 +386,20 @@ Page({
     if (this._castingTimer) clearTimeout(this._castingTimer)
     this._castingTimer = setTimeout(() => {
       this._castingTimer = null
+      const data = loadDiary()
+      data[today] = { ...data[today], yao }
+      if (!saveDiary(data)) {
+        this.setData({ castingState: 'idle' })
+        return
+      }
       this.setData({
         castingState: 'result',
-        yaos,
-        displayYaos: yaoTexts,
-        hexagramSymbol: hex.symbol || '',
+        displayYaos: hex.yaoTexts,
+        hexagramSymbol: hex.symbol,
         hexagramName: hex.name,
         hexagramText: hex.ci,
-        hexLines,
+        hexLines: hex.hexLines,
         hasCastToday: true
-      }, () => {
-        this.saveHex(yaoTexts, today)
       })
     }, 1200)
   },
@@ -423,17 +411,6 @@ Page({
     if (n === 2) return { type: 'yin', moving: false, value: 8 }
     if (n === 3) return { type: 'yang', moving: true, value: 9 }
     return { type: 'yin', moving: true, value: 6 }
-  },
-
-  getHex(yaos) {
-    const bin = yaos.map(y => y.type === 'yang' ? '1' : '0').join('')
-    return HEX_DATA[bin] || { symbol: '', name: '未知卦', ci: '' }
-  },
-
-  saveHex(yaoTexts, dateKey = getTodayKey()) {
-    const data = wx.getStorageSync('diary_data') || {}
-    data[dateKey] = { ...data[dateKey], yaos: this.data.yaos, yaoTexts: yaoTexts || this.data.displayYaos, hexagramSymbol: this.data.hexagramSymbol, hexagramName: this.data.hexagramName, hexagramText: this.data.hexagramText, lunarYear: this.data.lunarYear, lunarMonthDay: this.data.lunarMonthDay }
-    wx.setStorageSync('diary_data', data)
   },
 
   goToShare() {

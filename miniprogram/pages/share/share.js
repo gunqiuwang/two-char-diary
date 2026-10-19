@@ -1,6 +1,7 @@
 // pages/share/share.js
 const { solarToLunar } = require('../../utils/lunar')
 const { getTodayKey, loadBgStyle, BG_MAP, getWindowInfoSafe } = require('../../utils/common')
+const { loadDiary, getHexView, getHexViewFromBits } = require('../../utils/diary')
 
 Page({
   data: {
@@ -35,47 +36,48 @@ Page({
     })
 
     const dateKey = this.normalizeDateKey(options.date)
-    const diaryData = wx.getStorageSync('diary_data') || {}
-    const stored = diaryData[dateKey] || {}
+    const stored = loadDiary()[dateKey] || {}
     const sharedWordChars = Array.from(this.safeDecode(options.w || '')).slice(0, 2)
+    const [y, m, d] = dateKey.split('-').map(Number)
+    const lunar = solarToLunar(y, m, d)
+    const lunarText = {
+      lunarYear: lunar ? `${lunar.ganZhiYear}年` : '',
+      lunarMonthDay: lunar ? `${lunar.monthText}${lunar.dayText}` : ''
+    }
 
+    // 来自分享链接时只信任 date / w / l / s，卦名、卦辞、爻辞、农历全部本地推导，防止伪造文案
     if (sharedWordChars.length === 2) {
-      const [y, m, d] = dateKey.split('-').map(Number)
-      const lunar = solarToLunar(y, m, d)
-      const lineString = this.safeDecode(options.l || '').replace(/[^01]/g, '').slice(0, 6)
-      const hexLines = lineString.split('').map((ch, index) => ({ key: index, type: ch === '1' ? 'yang' : 'yin' }))
+      const lineString = this.safeDecode(options.l || '').replace(/[^01]/g, '')
+      // l 为自上而下，查表需自下而上
+      const hex = lineString.length === 6 ? getHexViewFromBits(lineString.split('').reverse().join('')) : null
       const sharedStyle = Object.prototype.hasOwnProperty.call(BG_MAP, options.s) ? options.s : this.data.bgStyle
       this.setData({
         dateKey,
         bgStyle: sharedStyle,
         bgClass: BG_MAP[sharedStyle] || '',
         isDark: sharedStyle === 'dark',
-        lunarYear: this.safeDecode(options.ly || '').slice(0, 16) || `${lunar.ganZhiYear}年`,
-        lunarMonthDay: this.safeDecode(options.lm || '').slice(0, 16) || `${lunar.monthText}${lunar.dayText}`,
+        ...lunarText,
         words: sharedWordChars.join(''),
         wordChars: [sharedWordChars[0] || '', sharedWordChars[1] || ''],
-        hexagramName: this.safeDecode(options.hn || '').slice(0, 16),
-        hexagramText: this.safeDecode(options.ht || '').slice(0, 160),
-        displayYaos: [],
-        hexLines
+        hexagramName: hex ? hex.name : '',
+        hexagramText: hex ? hex.ci : '',
+        displayYaos: hex ? hex.yaoTexts : [],
+        hexLines: hex ? hex.hexLines : []
       }, () => {
         this.prepareShareImage()
       })
     } else if (stored.words) {
-      const [y, m, d] = dateKey.split('-').map(Number)
-      const lunar = solarToLunar(y, m, d)
       const storedWordChars = Array.from(stored.words || '').slice(0, 2)
-      const hexLines = stored.yaos ? stored.yaos.slice().reverse().map((y, index) => ({ key: index, type: y.type })) : []
+      const hex = getHexView(stored)
       this.setData({
         dateKey,
-        lunarYear: stored.lunarYear || `${lunar.ganZhiYear}年`,
-        lunarMonthDay: stored.lunarMonthDay || `${lunar.monthText}${lunar.dayText}`,
+        ...lunarText,
         words: storedWordChars.join(''),
         wordChars: [storedWordChars[0] || '', storedWordChars[1] || ''],
-        hexagramName: stored.hexagramName || '',
-        hexagramText: stored.hexagramText || '',
-        displayYaos: stored.yaoTexts || [],
-        hexLines
+        hexagramName: hex ? hex.name : '',
+        hexagramText: hex ? hex.ci : '',
+        displayYaos: hex ? hex.yaoTexts : [],
+        hexLines: hex ? hex.hexLines : []
       }, () => {
         this.prepareShareImage()
       })
@@ -116,10 +118,6 @@ Page({
     const params = {
       date: dateKey,
       w: this.data.words || '',
-      ly: this.data.lunarYear || '',
-      lm: this.data.lunarMonthDay || '',
-      hn: this.data.hexagramName || '',
-      ht: this.data.hexagramText || '',
       l: lines,
       s: this.data.bgStyle || 'xuan'
     }
@@ -199,9 +197,7 @@ Page({
       let words = this.data.words
       if (!words) {
         const dateKey = this.data.dateKey || getTodayKey()
-        const diaryData = wx.getStorageSync('diary_data') || {}
-        const stored = diaryData[dateKey] || {}
-        words = stored.words || ''
+        words = (loadDiary()[dateKey] || {}).words || ''
       }
 
       if (!words) {

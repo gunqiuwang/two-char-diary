@@ -1,11 +1,12 @@
 // 农历转换工具
 // 基于简化的农历算法
+// 数据表已与香港天文台 1901–2050 历表逐日核对（1933 年闰五月/六月大小月按天文台校正）
 
 const LUNAR_INFO = [
   0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
   0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
   0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
-  0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
+  0x06566, 0x0d4a0, 0x0ea50, 0x16a95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
   0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
   0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5b0, 0x14573, 0x052b0, 0x0a9a8, 0x0e950, 0x06aa0,
   0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
@@ -57,11 +58,17 @@ function monthDays(year, month) {
   return (LUNAR_INFO[year - 1900] & (0x10000 >> month)) ? 30 : 29
 }
 
-// 公历转农历
+// 数据表覆盖的公历范围
+const MIN_YEAR = 1900
+const MAX_YEAR = 2050
+
+// 公历转农历，超出 1900-01-31 ~ 2050-12-31 返回 null
 function solarToLunar(year, month, day) {
   // 基准日期：1900年1月31日是农历1900年正月初一
-  const baseDate = new Date(1900, 0, 31)
-  const targetDate = new Date(year, month - 1, day)
+  // 用 UTC 计算天数差，避免本地夏令时（如 1986–1991 年）少算一天
+  const baseDate = Date.UTC(1900, 0, 31)
+  const targetDate = Date.UTC(year, month - 1, day)
+  if (!(targetDate >= baseDate) || new Date(targetDate).getUTCFullYear() > MAX_YEAR) return null
   let offset = Math.floor((targetDate - baseDate) / 86400000)
 
   // 计算农历年
@@ -136,6 +143,8 @@ function solarToLunar(year, month, day) {
 }
 
 module.exports = {
+  MIN_YEAR,
+  MAX_YEAR,
   solarToLunar,
   lunarYearDays,
   leapMonth,

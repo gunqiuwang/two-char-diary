@@ -45,6 +45,8 @@ miniprogram/
 
 test-project.js      # 项目静态验证
 test-lunar.js        # 农历换算样例验证
+test-regression.js   # 回归测试（农历/节气对照天文台、存储迁移、备份、分享参数）
+test-fixtures/       # 香港天文台 1901–2050 历表摘录
 docs/                # 验收、审计和 Agent Vault
 ```
 
@@ -60,6 +62,7 @@ docs/                # 验收、审计和 Agent Vault
 ```bash
 node test-project.js
 node test-lunar.js
+node test-regression.js
 ```
 
 `test-project.js` 检查：

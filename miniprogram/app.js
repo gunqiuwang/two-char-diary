@@ -1,9 +1,9 @@
 // app.js
+const { migrateDiary } = require('./utils/diary')
+
 App({
   onLaunch() {
-    if (!wx.getStorageSync('diary_data')) {
-      wx.setStorageSync('diary_data', {})
-    }
+    migrateDiary()
   },
 
   globalData: {}
